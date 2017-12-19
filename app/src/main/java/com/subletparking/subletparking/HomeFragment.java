@@ -18,14 +18,18 @@ import android.widget.ListView;
 import android.support.v7.widget.SearchView;
 import android.widget.Toast;
 
+import retrofit2.*;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 /**
  * Created by User on 12/18/2017.
  */
 
 public class HomeFragment extends Fragment {
+    public static final String API_URL = "https://api.github.com";
 
     View myView;
     private Button searchButton;
@@ -38,6 +42,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.home_layout, container, false);
+        // Create a very simple REST adapter which points the GitHub API.
 
         String[] parkings = {"parking 1", "parking 2", "parking 3", "parking 4", "parking 5"};
         ListAdapter listAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, parkings);
@@ -48,7 +53,7 @@ public class HomeFragment extends Fragment {
         searchButton = (Button) myView.findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 searchParking();
             }
         });
@@ -56,9 +61,7 @@ public class HomeFragment extends Fragment {
 
         return myView;
     }
-
-    public void searchParking()
-    {
+    public void searchParking() {
         Toast.makeText(getActivity(), "searching...", Toast.LENGTH_LONG).show(); // Makes a small message.
     }
 }
