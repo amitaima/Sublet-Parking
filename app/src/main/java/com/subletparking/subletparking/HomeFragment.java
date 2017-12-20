@@ -17,19 +17,36 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.support.v7.widget.SearchView;
 import android.widget.Toast;
-
-import retrofit2.*;
-import retrofit2.http.GET;
-import retrofit2.http.Path;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
+//retrofit
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.TextView;
+
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.http.*;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 /**
  * Created by User on 12/18/2017.
  */
 
 public class HomeFragment extends Fragment {
-    public static final String API_URL = "https://api.github.com";
+    public static final String BASE_URL = "127.0.0.1:5000/";
+    Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+    public interface MyApiEndpointInterface {
+        // Request method and URL specified in the annotation
+        // Callback for the parsed response is the last parameter
+        @GET("users/{id}")
+        Call<User> getUser(@Path("id") int id);
+        @GET("parkings/page")
+        Call<List<Parking>> getHomePage();
+    }
 
     View myView;
     private Button searchButton;
@@ -61,6 +78,7 @@ public class HomeFragment extends Fragment {
 
         return myView;
     }
+
     public void searchParking() {
         Toast.makeText(getActivity(), "searching...", Toast.LENGTH_LONG).show(); // Makes a small message.
     }
