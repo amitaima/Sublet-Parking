@@ -5,14 +5,14 @@ package com.subletparking.subletparking;
 
 public class Parking {
 
-    int userId;
-    int longitude;
-    int latitude;
-    String address;
-    String hours;
-    int costPerHour;
-    int rating;
-    int numberOfRaters;
+    private int userId;
+    private int longitude;
+    private int latitude;
+    private String address;
+    private String hours;
+    private int costPerHour;
+    private int rating;
+    private int numberOfRaters;
 
     public int getUserId() {
         return userId;

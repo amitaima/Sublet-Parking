@@ -5,7 +5,7 @@ package com.subletparking.subletparking;
  */
 
 public class User {
-    int id;
+    private int id;
     public int getId() {
         return id;
     }
