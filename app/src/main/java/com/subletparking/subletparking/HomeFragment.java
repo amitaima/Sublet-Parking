@@ -35,7 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HomeFragment extends Fragment {
     public static final String BASE_URL = "127.0.0.1:5000/";
-    Retrofit retrofit = new Retrofit.Builder()
+    /*Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment {
         Call<User> getUser(@Path("id") int id);
         @GET("parkings/page")
         Call<List<Parking>> getHomePage();
-    }
+    }*/
 
     View myView;
     private Button searchButton;
