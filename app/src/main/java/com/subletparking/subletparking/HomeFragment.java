@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment {
         Call<User> getUser(@Path("id") int id);
         @GET("parkings/page")
         Call<List<Parking>> getHomePage();
-    }
+    }*/
 
     View myView;
     private Button searchButton;
