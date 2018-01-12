@@ -41,21 +41,15 @@ public class MainActivity extends AppCompatActivity {
         loginbutton = (LoginButton)findViewById(R.id.facebook_login_button);
 
         loginbutton.setReadPermissions("email");
-        /*
-        // For connecting when connected
-        boolean loggedIn = AccessToken.getCurrentAccessToken() == null;
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
-        //loggedIn = AccessToken.getCurrentAccessToken() == null;
-        if (loggedIn) {
-            fbLoginSuccessfull();
-        }*/
+
+
 
         // Callback registration
         loginbutton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 String userId = loginResult.getAccessToken().getUserId();
-                fbLoginSuccessfull(userId);
+                fbLoginSuccessfull();
             }
 
             @Override
@@ -70,10 +64,20 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        // For connecting when connected
+        boolean loggedIn = AccessToken.getCurrentAccessToken() == null;
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+        //loggedIn = AccessToken.getCurrentAccessToken() == null;
+        if (loggedIn) {
+            fbLoginSuccessfull();
+        }
     }
 
-    public void fbLoginSuccessfull(String userId) {
-        Toast.makeText(this , "Welcome" + userId, Toast.LENGTH_LONG).show(); // Makes a small message.
+    public void fbLoginSuccessfull() {
+        Toast.makeText(this , "Welcome Amitai", Toast.LENGTH_LONG).show(); // Makes a small message.
+        Intent intent = new Intent(this, ParkingSpotListActivity.class);
+        finish();
+        startActivity(intent);
     }
 
     public void fbLoginCanceled() {

@@ -40,7 +40,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class HomeFragment extends Fragment {
-    public static final String BASE_URL = "http://192.168.14.33:5000/"; //server url
+    public static final String BASE_URL = "http://192.168.43.43:5000/"; //server url
     Gson gson = new GsonBuilder()
             .setLenient()//this relaxes the gson a lot, letting it parse malformed JSON as well
             .create();
@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment {
         Call<User> getUser(@Path("id") int id);
         @GET("parkings/page")
         Call<List<Parking>> getHomePage();
-    }*/
+    }
 
     View myView;
     private Button searchButton;
