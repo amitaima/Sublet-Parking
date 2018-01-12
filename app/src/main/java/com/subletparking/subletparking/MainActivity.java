@@ -24,7 +24,7 @@ import static android.R.attr.data;
 import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
-
+    public static String userId;
     private CallbackManager callbackManager;
     //private TextView info;
     private LoginButton loginbutton;
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         loginbutton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                String userId = loginResult.getAccessToken().getUserId();
+                userId = loginResult.getAccessToken().getUserId();
                 fbLoginSuccessfull(userId);
             }
 
@@ -100,5 +100,10 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ParkingSpotListActivity.class);
         finish();
         startActivity(intent);
+    }
+
+    public String getUserId()
+    {
+        return userId;
     }
 }

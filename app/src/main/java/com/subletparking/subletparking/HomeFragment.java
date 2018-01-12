@@ -23,7 +23,9 @@ import java.util.List;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
-
+import java.lang.Exception;
+import com.facebook.FacebookButtonBase;
+import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
@@ -55,7 +57,7 @@ public class HomeFragment extends Fragment {
         Call<User> getUser(@Path("id") int id);
         @GET("parkings/page")
         Call<List<Parking>> getHomePage();
-    }*/
+    }
 
     View myView;
     private Button searchButton;
@@ -70,6 +72,7 @@ public class HomeFragment extends Fragment {
         myView = inflater.inflate(R.layout.home_layout, container, false);
         MyApiEndpointInterface apiService = retrofit.create(MyApiEndpointInterface.class);
         Call<List<Parking>> call = apiService.getHomePage();
+        try {
         call.enqueue(new Callback<List<Parking>>(){
             @Override
             public void onResponse(Call<List<Parking>> call, Response<List<Parking>> response) {
@@ -106,7 +109,8 @@ public class HomeFragment extends Fragment {
                     }
                 });
             }
-        }); //try getting the page;
+        });
+        } catch(Exception e){Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();}//try getting the page;
         return myView;
     }
     public String[] parkingsToString(List<Parking> parkings) {
@@ -122,13 +126,12 @@ public class HomeFragment extends Fragment {
             strs[i] = strs[i].concat(String.valueOf(parkings.get(i).getCostPerHour()));
             strs[i] = strs[i].concat(" per hour\nRating: ");
             strs[i] = strs[i].concat(String.valueOf(parkings.get(i).getRating()));
-            strs[i] = strs[i].concat("Adress: ");
         }
         return strs;
     }
 
     public void searchParking() {
         Toast.makeText(getActivity(), "searching...", Toast.LENGTH_LONG).show(); // Makes a small message.
-    }
+     }
 }
 

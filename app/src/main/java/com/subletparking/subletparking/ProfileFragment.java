@@ -34,7 +34,7 @@ public class ProfileFragment extends Fragment {
                 myAlertDialog();
            }
         });
-
+        ((MainActivity)getActivity()).getUserId(); //the userId from the facebook login button
 
 
         return myView;
