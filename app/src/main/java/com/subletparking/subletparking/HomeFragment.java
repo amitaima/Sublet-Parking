@@ -42,22 +42,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class HomeFragment extends Fragment {
-    public static final String BASE_URL = "http://192.168.14.33:5000/"; //server url
-    Gson gson = new GsonBuilder()
-            .setLenient()//this relaxes the gson a lot, letting it parse malformed JSON as well
-            .create();
-    Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(gson)) //Gson converts the answer to classes
-            .build();
-    public interface MyApiEndpointInterface {
-        // Request method and URL specified in the annotation
-        // Callback for the parsed response is the last parameter
-        @GET("users/{id}")
-        Call<User> getUser(@Path("id") int id);
-        @GET("parkings/page")
-        Call<List<Parking>> getHomePage();
-    }
 
     View myView;
     private Button searchButton;
@@ -65,13 +49,12 @@ public class HomeFragment extends Fragment {
     private ArrayList<String> stringArrayList;
     private EditText editText;
     private ArrayAdapter<String> stringArrayAdapter;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.home_layout, container, false);
-        MyApiEndpointInterface apiService = retrofit.create(MyApiEndpointInterface.class);
-        Call<List<Parking>> call = apiService.getHomePage();
+        MyApplication ap = (MyApplication)((ParkingSpotListActivity)this.getActivity()).getApplication();
+        Call<List<Parking>> call = ap.getApiService().getHomePage();
         try {
         call.enqueue(new Callback<List<Parking>>(){
             @Override
@@ -129,6 +112,7 @@ public class HomeFragment extends Fragment {
         }
         return strs;
     }
+
 
     public void searchParking() {
         Toast.makeText(getActivity(), "searching...", Toast.LENGTH_LONG).show(); // Makes a small message.

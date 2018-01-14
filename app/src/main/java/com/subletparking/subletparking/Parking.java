@@ -6,8 +6,8 @@ package com.subletparking.subletparking;
 public class Parking {
 
     private int userId;
-    private int longitude;
-    private int latitude;
+    private float longitude;
+    private float latitude;
     private String address;
     private String hours;
     private int costPerHour;
@@ -17,10 +17,10 @@ public class Parking {
     public int getUserId() {
         return userId;
     }
-    public int getLongitude() {
+    public float getLongitude() {
         return longitude;
     }
-    public int getLatitude() {
+    public float getLatitude() {
         return latitude;
     }
     public String getAddress() { return address; }
