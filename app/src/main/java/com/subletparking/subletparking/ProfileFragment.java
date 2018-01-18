@@ -5,11 +5,16 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.InputType;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 /**
@@ -22,9 +27,8 @@ public class ProfileFragment extends Fragment {
     Button openDialog;
     Dialog myDialog;
     Button submitButton,close;
-    ParkingSpotListActivity ac = (ParkingSpotListActivity)this.getActivity();
-    MyApplication ap = (MyApplication)ac.getApplication();
-
+    ImageButton addTimeButton;
+    public int numberOfLines = 1;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -55,9 +59,11 @@ public class ProfileFragment extends Fragment {
 
         submitButton = (Button)myDialog.findViewById(R.id.submitButton);
         close = (Button)myDialog.findViewById(R.id.close);
+        addTimeButton = (ImageButton)myDialog.findViewById(R.id.addTimeButton);
 
         submitButton.setEnabled(true);
         close.setEnabled(true);
+        addTimeButton.setEnabled(true);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +81,41 @@ public class ProfileFragment extends Fragment {
                 myDialog.cancel(); // Exits dialog
             }
         });
+
+        addTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LinearLayout topLayoutParent = (LinearLayout)myDialog.findViewById(R.id.timeLayout);
+                // add layout
+                LinearLayout horizontolLayout = new LinearLayout(getActivity());
+                LinearLayout.LayoutParams p1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                horizontolLayout.setLayoutParams(p1);
+                horizontolLayout.setOrientation(LinearLayout.HORIZONTAL);
+                topLayoutParent.addView(horizontolLayout);
+
+                // Add edittext
+                EditText et = new EditText(getActivity());
+                // Args: width, height, weight
+                LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+                p2.setMargins(25,25,25,25);
+                et.setLayoutParams(p2);
+                et.setInputType(InputType.TYPE_CLASS_DATETIME |InputType.TYPE_DATETIME_VARIATION_TIME);
+                et.setHint("start time");
+                et.setId(numberOfLines + 1);
+                numberOfLines++;
+                horizontolLayout.addView(et);
+
+                // Add edittext
+                EditText et1 = new EditText(getActivity());
+                et1.setLayoutParams(p2);
+                et1.setInputType(InputType.TYPE_CLASS_DATETIME |InputType.TYPE_DATETIME_VARIATION_TIME);
+                et1.setHint("end time");
+                et1.setId(numberOfLines + 1);
+                numberOfLines++;
+                horizontolLayout.addView(et1);
+            }
+        });
+
 
         myDialog.show();
     }
