@@ -24,7 +24,6 @@ import static android.R.attr.data;
 import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
-    public static String userId;
     private CallbackManager callbackManager;
     //private TextView info;
     private LoginButton loginbutton;
@@ -33,29 +32,29 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        loginbutton = (LoginButton)findViewById(R.id.facebook_login_button);
+        final MyApplication ap = ((MyApplication)this.getApplication());
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
-        setContentView(R.layout.activity_main);
         //info = (TextView)findViewById(R.id.info);
-        loginbutton = (LoginButton)findViewById(R.id.facebook_login_button);
-
         loginbutton.setReadPermissions("email");
-        /*
         // For connecting when connected
         boolean loggedIn = AccessToken.getCurrentAccessToken() == null;
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
-        //loggedIn = AccessToken.getCurrentAccessToken() == null;
-        if (loggedIn) {
-            fbLoginSuccessfull();
-        }*/
+        if (loggedIn)
+        {//loggedIn = AccessToken.getCurrentAccessToken() == null;
+            String id = AccessToken.getCurrentAccessToken().getUserId();
+            ap.setUserId(id);
+            fbLoginSuccessfull(id);
+        }
 
         // Callback registration
         loginbutton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                userId = loginResult.getAccessToken().getUserId();
-                fbLoginSuccessfull(userId);
+                String id = loginResult.getAccessToken().getUserId();
+                ap.setUserId(id);
+                fbLoginSuccessfull(id);
             }
 
             @Override
@@ -83,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
     public void fbLoginFailed() {
         Toast.makeText(this , "Error in connection", Toast.LENGTH_LONG).show(); // Makes a small message.
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
@@ -100,10 +98,5 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ParkingSpotListActivity.class);
         finish();
         startActivity(intent);
-    }
-
-    public String getUserId()
-    {
-        return userId;
     }
 }
