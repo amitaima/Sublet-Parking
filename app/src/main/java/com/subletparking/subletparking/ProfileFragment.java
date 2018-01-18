@@ -2,6 +2,7 @@ package com.subletparking.subletparking;
 
 import android.app.Dialog;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -21,6 +22,8 @@ public class ProfileFragment extends Fragment {
     Button openDialog;
     Dialog myDialog;
     Button submitButton,close;
+    ParkingSpotListActivity ac = (ParkingSpotListActivity)this.getActivity();
+    MyApplication ap = (MyApplication)ac.getApplication();
 
     @Nullable
     @Override
@@ -34,8 +37,12 @@ public class ProfileFragment extends Fragment {
                 myAlertDialog();
            }
         });
-
-
+        try {
+            String id = ap.getUserId();
+            //get the application (MyApplication) from the activity; then get the id from the application (MyApplication)
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
 
         return myView;
     }
