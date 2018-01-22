@@ -43,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
         if (loggedIn)
         {//loggedIn = AccessToken.getCurrentAccessToken() == null;
-            String id = AccessToken.getCurrentAccessToken().getUserId();
+            //String id = AccessToken.getCurrentAccessToken().getUserId();
+            String id = "amitai";
             ap.setUserId(id);
             fbLoginSuccessfull(id);
         }*/
