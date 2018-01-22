@@ -39,22 +39,22 @@ public class MainActivity extends AppCompatActivity {
         //info = (TextView)findViewById(R.id.info);
         loginbutton.setReadPermissions("email");
         // For connecting when connected
-        boolean loggedIn = AccessToken.getCurrentAccessToken() == null;
+        /*boolean loggedIn = AccessToken.getCurrentAccessToken() == null;
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
         if (loggedIn)
         {//loggedIn = AccessToken.getCurrentAccessToken() == null;
             String id = AccessToken.getCurrentAccessToken().getUserId();
             ap.setUserId(id);
             fbLoginSuccessfull(id);
-        }
+        }*/
 
         // Callback registration
         loginbutton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                String id = loginResult.getAccessToken().getUserId();
+                long id = Long.parseLong(loginResult.getAccessToken().getUserId());
                 ap.setUserId(id);
-                fbLoginSuccessfull(id);
+                fbLoginSuccessfull(String.valueOf(id));
             }
 
             @Override
@@ -73,6 +73,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void fbLoginSuccessfull(String userId) {
         Toast.makeText(this , "Welcome" + userId, Toast.LENGTH_LONG).show(); // Makes a small message.
+        Intent intent = new Intent(this, ParkingSpotListActivity.class);
+        finish();
+        startActivity(intent);
     }
 
     public void fbLoginCanceled() {

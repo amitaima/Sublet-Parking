@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.app.Fragment;
 import android.widget.Button;
 
+import com.facebook.login.LoginManager;
+
 public class ParkingSpotListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -120,6 +122,7 @@ public class ParkingSpotListActivity extends AppCompatActivity
                             new LogoutFragment())
                     .commit();*/
             Intent intent = new Intent(this, MainActivity.class);
+            LoginManager.getInstance().logOut();
             finish();
             startActivity(intent);
         }
