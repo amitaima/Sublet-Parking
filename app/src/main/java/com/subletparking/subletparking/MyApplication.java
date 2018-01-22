@@ -20,13 +20,8 @@ import retrofit2.http.Path;
  */
 
 public class MyApplication extends Application {
-<<<<<<< HEAD
-    private String userId;
-    public static final String BASE_URL = "http://10.100.102.129:5000/"; //server url
-=======
     private long userId;
     public static final String BASE_URL = "http://192.168.14.33:5000/"; //server url
->>>>>>> e4c615dffc6a0fc14f72148c1ad3276b1d1ab56b
     Gson gson = new GsonBuilder()
             .setLenient() //this relaxes the gson a lot, letting it parse malformed JSON as well
             .create();

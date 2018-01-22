@@ -34,11 +34,7 @@ public class ProfileFragment extends Fragment {
     Button submitButton,close;
     ImageButton addTimeButton;
     public int numberOfLines = 1;
-<<<<<<< HEAD
-    MyApplication ap = (MyApplication)((ParkingSpotListActivity)this.getActivity()).getApplication();
-=======
 
->>>>>>> e4c615dffc6a0fc14f72148c1ad3276b1d1ab56b
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -51,15 +47,6 @@ public class ProfileFragment extends Fragment {
                 myAlertDialog();
            }
         });
-<<<<<<< HEAD
-        /*try {
-            String id = ap.getUserId();
-            //get the application (MyApplication) from the activity; then get the id from the application (MyApplication)
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }*/
-=======
->>>>>>> e4c615dffc6a0fc14f72148c1ad3276b1d1ab56b
 
         return myView;
     }
@@ -84,10 +71,6 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(getActivity(), "Parking has been submited", Toast.LENGTH_LONG).show(); // Makes a small message.
 
                 // write here the function to add the Parking to server.
-<<<<<<< HEAD
-
-
-=======
                 try {
                     long id = ap.getUserId();
                     //get all of the info from the layout
@@ -97,7 +80,6 @@ public class ProfileFragment extends Fragment {
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
->>>>>>> e4c615dffc6a0fc14f72148c1ad3276b1d1ab56b
                 myDialog.cancel(); // Exits dialog
             }
         });
