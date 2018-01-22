@@ -53,9 +53,9 @@ public class MainActivity extends AppCompatActivity {
         loginbutton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                String id = loginResult.getAccessToken().getUserId();
+                long id = Long.parseLong(loginResult.getAccessToken().getUserId());
                 ap.setUserId(id);
-                fbLoginSuccessfull(id);
+                fbLoginSuccessfull(String.valueOf(id));
             }
 
             @Override

@@ -10,7 +10,9 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 /**
@@ -18,10 +20,10 @@ import retrofit2.http.Path;
  */
 
 public class MyApplication extends Application {
-    private String userId;
-    public static final String BASE_URL = "http://10.100.102.129:5000/"; //server url
+    private long userId;
+    public static final String BASE_URL = "http://192.168.14.33:5000/"; //server url
     Gson gson = new GsonBuilder()
-            .setLenient()//this relaxes the gson a lot, letting it parse malformed JSON as well
+            .setLenient() //this relaxes the gson a lot, letting it parse malformed JSON as well
             .create();
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -34,6 +36,8 @@ public class MyApplication extends Application {
         Call<User> getUser(@Path("id") int id);
         @GET("parkings/page")
         Call<List<Parking>> getHomePage();
+        @POST("insertparking/parking")
+        Call<Parking> insertParking(@Body Parking parking);
     }
     public MyApiEndpointInterface apiService = retrofit.create(MyApiEndpointInterface.class);
 
@@ -41,11 +45,11 @@ public class MyApplication extends Application {
     {
         return apiService;
     }
-    public String getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(String id) {
+    public void setUserId(long id) {
         userId = id;
     }
 }
