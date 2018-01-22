@@ -29,6 +29,7 @@ public class ProfileFragment extends Fragment {
     Button submitButton,close;
     ImageButton addTimeButton;
     public int numberOfLines = 1;
+    MyApplication ap = (MyApplication)((ParkingSpotListActivity)this.getActivity()).getApplication();
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -41,12 +42,12 @@ public class ProfileFragment extends Fragment {
                 myAlertDialog();
            }
         });
-        try {
+        /*try {
             String id = ap.getUserId();
             //get the application (MyApplication) from the activity; then get the id from the application (MyApplication)
         } catch (Throwable e) {
             e.printStackTrace();
-        }
+        }*/
 
         return myView;
     }
@@ -70,7 +71,8 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "Parking has been submited", Toast.LENGTH_LONG).show(); // Makes a small message.
 
-                // Wright here the function to add the Parking to server.
+                // write here the function to add the Parking to server.
+
 
                 myDialog.cancel(); // Exits dialog
             }
