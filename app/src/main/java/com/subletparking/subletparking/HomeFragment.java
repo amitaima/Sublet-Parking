@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +25,18 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 import java.lang.Exception;
+
+import com.arlib.floatingsearchview.FloatingSearchView;
 import com.facebook.FacebookButtonBase;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
@@ -41,9 +52,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by User on 12/18/2017.
  */
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements OnMapReadyCallback{
 
+    GoogleMap mGoogleMap;
+    MapView mMapView;
     View myView;
+    FloatingSearchView mSearchView;
+    DrawerLayout mDrawerLayout;
+
     private Button searchButton;
     private ListView listview;
     private ArrayList<String> stringArrayList;
@@ -53,7 +69,13 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.home_layout, container, false);
-        MyApplication ap = (MyApplication)((ParkingSpotListActivity)this.getActivity()).getApplication();
+
+        mSearchView = (FloatingSearchView) myView.findViewById(R.id.floating_search_view);
+        mDrawerLayout = (DrawerLayout) myView.findViewById(R.id.drawer_layout);
+        //mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+
+        /*MyApplication ap = (MyApplication)((ParkingSpotListActivity)this.getActivity()).getApplication();
         Call<List<Parking>> call = ap.getApiService().getHomePage();
         try {
         call.enqueue(new Callback<List<Parking>>(){
@@ -93,7 +115,7 @@ public class HomeFragment extends Fragment {
                 });
             }
         });
-        } catch(Exception e){Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();}//try getting the page;
+        } catch(Exception e){Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();}//try getting the page;*/
         return myView;
     }
     public String[] parkingsToString(List<Parking> parkings) {
@@ -113,9 +135,35 @@ public class HomeFragment extends Fragment {
         return strs;
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mMapView = (MapView) myView.findViewById(R.id.map);
+        if(mMapView!=null){
+            mMapView.onCreate(null);
+            mMapView.onResume();
+            mMapView.getMapAsync(this);
+        }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+        MapsInitializer.initialize(getActivity());
+        mGoogleMap = googleMap;
+        googleMap.setMapType((GoogleMap.MAP_TYPE_NORMAL));
+
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(40.689247, -74.044502)).title("Statue of liberty"));
+
+        CameraPosition Liberty = CameraPosition.builder().target(new LatLng(40.689247, -74.044502)).zoom(16).bearing(0).tilt(45).build();
+
+        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(Liberty));
+
+    }
 
     public void searchParking() {
         Toast.makeText(getActivity(), "searching...", Toast.LENGTH_LONG).show(); // Makes a small message.
-     }
+    }
 }
 
