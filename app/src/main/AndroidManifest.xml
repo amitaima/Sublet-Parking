@@ -4,7 +4,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" /> <!-- added for connecting to server -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    
     <!-- added for connecting to server -->
     <application
         android:name=".MyApplication"
@@ -49,6 +52,16 @@
             </intent-filter>
         </activity>
 
+        <!--Maps Android Key-->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBE24kO8yLjBGfhJ0lmhx7SanrzsTurD7Y"/>
+        <!--Maps-->
+
     </application>
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true"/>
 
 </manifest>

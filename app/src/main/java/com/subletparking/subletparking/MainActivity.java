@@ -33,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loginbutton = (LoginButton)findViewById(R.id.facebook_login_button);
+        // FOR NOW THAT WAY YOU DONT NEED TO LOGOUT AND IN EVERY TIME///////////////////
+        LoginManager.getInstance().logOut();
+        //////////////////////////////////////////////////////////////////////////////
         final MyApplication ap = ((MyApplication)this.getApplication());
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
@@ -43,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
         if (loggedIn)
         {//loggedIn = AccessToken.getCurrentAccessToken() == null;
-            String id = AccessToken.getCurrentAccessToken().getUserId();
+            //String id = AccessToken.getCurrentAccessToken().getUserId();
+            String id = "amitai";
             ap.setUserId(id);
             fbLoginSuccessfull(id);
         }*/
