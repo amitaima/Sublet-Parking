@@ -53,47 +53,14 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.home_layout, container, false);
-        MyApplication ap = (MyApplication)((ParkingSpotListActivity)this.getActivity()).getApplication();
-        Call<List<Parking>> call = ap.getApiService().getHomePage();
-        try {
-        call.enqueue(new Callback<List<Parking>>(){
+        searchParking();
+        searchButton = (Button) myView.findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(Call<List<Parking>> call, Response<List<Parking>> response) {
-                int statusCode = response.code();
-                List<Parking> parkingPage = response.body();
-                String[] parkings = parkingsToString(parkingPage);
-                ListAdapter listAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, parkings);
-                ListView listview = (ListView) myView.findViewById(R.id.listView);
-                listview.setAdapter(listAdapter);
-
-
-                searchButton = (Button) myView.findViewById(R.id.searchButton);
-                searchButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        searchParking();
-                    }
-                });
-            }
-            @Override
-            public void onFailure(Call<List<Parking>> call, Throwable t) {
-                // Log error here since request failedString[] parkings = parkingsToString(parkingPage);
-                String[] parkings = {"1", "2", "3",t.getMessage()};
-                ListAdapter listAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, parkings);
-                ListView listview = (ListView) myView.findViewById(R.id.listView);
-                listview.setAdapter(listAdapter);
-
-
-                searchButton = (Button) myView.findViewById(R.id.searchButton);
-                searchButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        searchParking();
-                    }
-                });
+            public void onClick(View v) {
+                searchParking();
             }
         });
-        } catch(Exception e){Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();}//try getting the page;
         return myView;
     }
     public String[] parkingsToString(List<Parking> parkings) {
@@ -116,6 +83,29 @@ public class HomeFragment extends Fragment {
 
     public void searchParking() {
         Toast.makeText(getActivity(), "searching...", Toast.LENGTH_LONG).show(); // Makes a small message.
-     }
+        MyApplication ap = (MyApplication)((ParkingSpotListActivity)this.getActivity()).getApplication();
+        Call<List<Parking>> call = ap.getApiService().getHomePage();
+        try {
+            call.enqueue(new Callback<List<Parking>>(){
+                @Override
+                public void onResponse(Call<List<Parking>> call, Response<List<Parking>> response) {
+                    int statusCode = response.code();
+                    List<Parking> parkingPage = response.body();
+                    String[] parkings = parkingsToString(parkingPage);
+                    ListAdapter listAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, parkings);
+                    ListView listview = (ListView) myView.findViewById(R.id.listView);
+                    listview.setAdapter(listAdapter);
+                }
+                @Override
+                public void onFailure(Call<List<Parking>> call, Throwable t) {
+                    // Log error here since request failedString[] parkings = parkingsToString(parkingPage);
+                    String[] parkings = {"1", "2", "3",t.getMessage()};
+                    ListAdapter listAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, parkings);
+                    ListView listview = (ListView) myView.findViewById(R.id.listView);
+                    listview.setAdapter(listAdapter);
+                }
+            });
+        } catch(Exception e){Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();}//try getting the page;
+    }
 }
 

@@ -22,19 +22,19 @@
         android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:layout_gravity="center|left"
+        android:layout_gravity="center|start"
         android:layout_margin="5dp"
         android:inputType="textPersonName"
-        android:hint="search" />
+        android:hint="@string/search_hint" />
 
     <Button
         android:id="@+id/searchButton"
         android:layout_width="48dp"
-        android:layout_gravity="center|right"
+        android:layout_gravity="center|end"
         android:layout_margin="5dp"
         android:onClick="searchParking"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_search_black_24dp" />
+        android:drawableStart="@drawable/ic_search_black_24dp" />
 
     </LinearLayout>
 
@@ -42,14 +42,13 @@
         android:id="@+id/listView"
         android:layout_width="390dp"
         android:layout_height="570dp"
+        android:background="@color/com_facebook_button_border_color_focused"
+        android:divider="@color/cardview_light_background"
+        android:dividerHeight="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.77"/>
-
-
-
-
+        app:layout_constraintVertical_bias="0.666" />
 
 </android.support.constraint.ConstraintLayout>
