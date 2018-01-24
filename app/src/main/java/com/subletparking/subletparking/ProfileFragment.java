@@ -33,6 +33,9 @@ public class ProfileFragment extends Fragment {
     Dialog myDialog;
     Button submitButton,close;
     ImageButton addTimeButton;
+    EditText insertAddress, insertTimeStart, insertTimeEnd, insertPrice;
+    String address, timeStart, timeEnd;
+    int price;
     public int numberOfLines = 1;
 
     @Nullable
@@ -60,6 +63,11 @@ public class ProfileFragment extends Fragment {
         submitButton = (Button)myDialog.findViewById(R.id.submitButton);
         close = (Button)myDialog.findViewById(R.id.close);
         addTimeButton = (ImageButton)myDialog.findViewById(R.id.addTimeButton);
+        insertAddress = (EditText) myDialog.findViewById(R.id.insertAddress);
+        insertTimeStart = (EditText)myDialog.findViewById(R.id.insertTimeStart);
+        insertTimeEnd = (EditText)myDialog.findViewById(R.id.insertTimeEnd);
+        insertPrice = (EditText)myDialog.findViewById(R.id.insertPrice);
+
 
         submitButton.setEnabled(true);
         close.setEnabled(true);
@@ -73,8 +81,16 @@ public class ProfileFragment extends Fragment {
                 // write here the function to add the Parking to server.
                 try {
                     long id = ap.getUserId();
+
                     //get all of the info from the layout
-                    Parking parking = new Parking(id, 3.3, 3.3, "there", "1 to 3", 12, 0, 0); //demo parking
+                    address = insertAddress.getText().toString();
+                    timeStart = insertTimeStart.getText().toString();
+                    timeEnd = insertTimeEnd.getText().toString();
+                    price = Integer.parseInt(insertPrice.getText().toString());
+                    /////////////////////////////////////
+
+                    Parking parking = new Parking(id, 3.3, 3.3, address, timeStart + " to " + timeEnd, price, 0, 0);
+                    //Parking parking = new Parking(id, 3.3, 3.3, "moreshet 101", "1 to 3", 12, 0, 0); //demo parking
                     sendParking(parking);
                     //get the application (MyApplication) from the activity; then get the id from the application (MyApplication)
                 } catch (Throwable e) {

@@ -33,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loginbutton = (LoginButton)findViewById(R.id.facebook_login_button);
+        // FOR NOW THAT WAY YOU DONT NEED TO LOGOUT AND IN EVERY TIME///////////////////
+        LoginManager.getInstance().logOut();
+        //////////////////////////////////////////////////////////////////////////////
         final MyApplication ap = ((MyApplication)this.getApplication());
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
