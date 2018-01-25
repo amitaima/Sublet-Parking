@@ -17,11 +17,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.app.Fragment;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.facebook.login.LoginManager;
 
 public class ParkingSpotListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    ImageButton menuButtun;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,21 +32,23 @@ public class ParkingSpotListActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        menuButtun = (ImageButton) findViewById(R.id.menuButton1);
 
         android.app.FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.contentFrame,
                         new HomeFragment())
                 .commit();
+        navigationView.getMenu().getItem(0).setChecked(true);
     }
 
     @Override
