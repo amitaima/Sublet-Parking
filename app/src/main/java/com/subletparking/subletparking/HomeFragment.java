@@ -168,7 +168,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
 
     public void searchParking() {
         Toast.makeText(getActivity(), "searching...", Toast.LENGTH_LONG).show(); // Makes a small message.
-        MyApplication ap = (MyApplication)((ParkingSpotListActivity)this.getActivity()).getApplication();
+        /*MyApplication ap = (MyApplication)((ParkingSpotListActivity)this.getActivity()).getApplication();
         Call<List<Parking>> call = ap.getApiService().getHomePage();
         try {
             call.enqueue(new Callback<List<Parking>>(){
@@ -190,7 +190,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
                     listview.setAdapter(listAdapter);
                 }
             });
-        } catch(Exception e){Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();}//try getting the page;
+        } catch(Exception e){Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();}//try getting the page;*/
     }
 }
 

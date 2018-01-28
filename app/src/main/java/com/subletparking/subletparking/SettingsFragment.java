@@ -1,5 +1,6 @@
 package com.subletparking.subletparking;
 
+import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Switch;
@@ -26,6 +28,7 @@ public class SettingsFragment extends Fragment {
     DrawerLayout mDrawerLayout;
     Button colorThemeButton, fontSizeButton, logOutButton;
     Switch notificationSwitch;
+    Dialog myDialog;
 
     @Nullable
     @Override
@@ -51,8 +54,7 @@ public class SettingsFragment extends Fragment {
         colorThemeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDrawerLayout.openDrawer(Gravity.LEFT);
-
+                myColorDialog();
             }
         });
 
@@ -75,5 +77,56 @@ public class SettingsFragment extends Fragment {
         });
 
         return myView;
+    }
+
+    public void myColorDialog() {
+        myDialog = new Dialog(getActivity());
+        myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        myDialog.setContentView(R.layout.color_dialog);
+        myDialog.setTitle("App Color Theme");
+        myDialog.show();
+
+        Button defaultButton = (Button) myDialog.findViewById(R.id.defaultColorButton);
+        Button redButton = (Button) myDialog.findViewById(R.id.redColorButton);
+        Button greenButton = (Button) myDialog.findViewById(R.id.greenColorButton);
+        Button pinkButton = (Button) myDialog.findViewById(R.id.pinkColorButton);
+        Button yellowButton = (Button) myDialog.findViewById(R.id.yellowColorButton);
+
+        defaultButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.cancel();
+            }
+        });
+
+        redButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.cancel();
+            }
+        });
+
+        greenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.cancel();
+            }
+        });
+
+        pinkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.cancel();
+            }
+        });
+
+        yellowButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.cancel();
+            }
+        });
+
+
     }
 }

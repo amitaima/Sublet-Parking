@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:text="Change App Color"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_height="wrap_content">
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:orientation="horizontal">
+        <com.dd.ShadowLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            app:sl_shadowRadius="2dp"
+            app:sl_shadowColor="#AA000000"
+            android:layout_weight="1"
+            android:layout_marginBottom="20dp"
+            app:sl_dx="0dp"
+            app:sl_dy="0dp"
+            app:sl_cornerRadius="100dp"
+            app:sl_fillColor="@color/colorAccent"
+            android:layout_marginTop="14dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:id="@+id/defaultColorButton"
+            />
+
+            </com.dd.ShadowLayout>
+
+        <com.dd.ShadowLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            app:sl_shadowRadius="2dp"
+            app:sl_shadowColor="#AA000000"
+            android:layout_weight="1"
+            app:sl_dx="0dp"
+            app:sl_dy="0dp"
+            app:sl_cornerRadius="100dp"
+            app:sl_fillColor="@color/red"
+            android:layout_marginTop="14dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:id="@+id/redColorButton"
+                />
+
+        </com.dd.ShadowLayout>
+
+        <com.dd.ShadowLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            app:sl_shadowRadius="2dp"
+            app:sl_shadowColor="#AA000000"
+            android:layout_weight="1"
+            app:sl_dx="0dp"
+            app:sl_dy="0dp"
+            app:sl_cornerRadius="100dp"
+            app:sl_fillColor="@color/green"
+            android:layout_marginTop="14dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:id="@+id/greenColorButton"
+                />
+
+        </com.dd.ShadowLayout>
+
+        <com.dd.ShadowLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            app:sl_shadowRadius="2dp"
+            app:sl_shadowColor="#AA000000"
+            android:layout_weight="1"
+            app:sl_dx="0dp"
+            app:sl_dy="0dp"
+            app:sl_cornerRadius="100dp"
+            app:sl_fillColor="@color/pink"
+            android:layout_marginTop="14dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:id="@+id/pinkColorButton"
+                />
+
+        </com.dd.ShadowLayout>
+
+        <com.dd.ShadowLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            app:sl_shadowRadius="2dp"
+            app:sl_shadowColor="#AA000000"
+            android:layout_weight="1"
+            app:sl_dx="0dp"
+            app:sl_dy="0dp"
+            app:sl_cornerRadius="100dp"
+            app:sl_fillColor="@color/yellow"
+            android:layout_marginTop="14dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:id="@+id/yellowColorButton"
+                />
+
+        </com.dd.ShadowLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
