@@ -1,10 +1,13 @@
 package com.subletparking.subletparking;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -16,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.app.Fragment;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 
@@ -49,6 +53,35 @@ public class ParkingSpotListActivity extends AppCompatActivity
                         new HomeFragment())
                 .commit();
         navigationView.getMenu().getItem(0).setChecked(true);
+
+        /////////////////Setting different color for selected fragment in navbar//////////////
+        //Setting default colors for menu item Text and Icon
+        int navDefaultTextColor = Color.parseColor("#808080");
+
+        //Defining ColorStateList for menu item Text
+        ColorStateList navMenuTextList = new ColorStateList(
+                new int[][]{
+                        new int[]{android.R.attr.state_checked},
+                        new int[]{android.R.attr.state_enabled},
+                        new int[]{android.R.attr.state_pressed},
+                        new int[]{android.R.attr.state_focused},
+                        new int[]{android.R.attr.state_pressed}
+                },
+                new int[] {
+                        this.getResources().getColor(R.color.colorAccent),
+                        navDefaultTextColor,
+                        navDefaultTextColor,
+                        navDefaultTextColor,
+                        navDefaultTextColor
+                }
+        );
+
+        navigationView.setItemTextColor(navMenuTextList);
+
+        ////////Set status bar color///////////
+        Window window = this.getWindow();
+        // finally change the color
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.colorAccent));
     }
 
     @Override
