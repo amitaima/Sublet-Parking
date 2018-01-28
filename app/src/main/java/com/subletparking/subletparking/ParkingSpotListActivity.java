@@ -120,16 +120,12 @@ public class ParkingSpotListActivity extends AppCompatActivity
                     .replace(R.id.contentFrame,
                             new CustomerServiceFragment())
                     .commit();
-        } else if (id == R.id.nav_logout) {
-            /*fragmentManager.beginTransaction()
-                    .replace(R.id.contentFrame,
-                            new LogoutFragment())
-                    .commit();*/
+        } /*else if (id == R.id.nav_logout) {
             Intent intent = new Intent(this, MainActivity.class);
             LoginManager.getInstance().logOut();
             finish();
             startActivity(intent);
-        }
+        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
