@@ -105,7 +105,7 @@ public class ProfileFragment extends Fragment {
                     price = Integer.parseInt(insertPrice.getText().toString());
                     /////////////////////////////////////
 
-                    Parking parking = new Parking(id, 3.3, 3.3, address, timeStart + " to " + timeEnd, price, 0, 0);
+                    Parking parking = new Parking(id, 3.3, 3.3, address, timeStart + " to " + timeEnd, price, 0, 0, false, false);
                     //Parking parking = new Parking(id, 3.3, 3.3, "moreshet 101", "1 to 3", 12, 0, 0); //demo parking
                     sendParking(parking);
                     //get the application (MyApplication) from the activity; then get the id from the application (MyApplication)
