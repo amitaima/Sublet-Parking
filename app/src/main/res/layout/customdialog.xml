@@ -7,6 +7,7 @@
         android:layout_width="wrap_content"
         android:text="Add Parking"
         android:layout_gravity="center"
+        android:paddingTop="10dp"
         android:textSize="18sp"
         android:layout_margin="5dp"
         android:layout_height="wrap_content" />
@@ -23,7 +24,7 @@
         android:id="@+id/insertAddress"
         android:layout_width="300dp"
         android:layout_margin="10dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="address" />
@@ -34,58 +35,103 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-    <ImageButton
-        android:id="@+id/addTimeButton"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|left"
-        android:layout_margin="5dp"
-        android:src="@drawable/ic_add_black_24dp"
-        android:textStyle="bold" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/insertTimeStart"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="time"
-            android:hint="time start" />
+            android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/insertTimeEnd"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="time"
-            android:hint="time end" />
+            <ImageButton
+                android:id="@+id/addTimeButton"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center|left"
+                android:layout_margin="5dp"
+                android:tint="#808080"
+                android:src="@drawable/ic_add_black_24dp"
+                android:textStyle="bold" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/insertTimeStart"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="time start"
+                    android:inputType="time" />
+
+                <EditText
+                    android:id="@+id/insertTimeEnd"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="time end"
+                    android:inputType="time" />
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
     </LinearLayout>
 
     <EditText
         android:id="@+id/insertPrice"
         android:layout_width="300dp"
         android:layout_margin="10dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:ems="10"
         android:inputType="numberDecimal"
         android:hint="price per hour" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Gate"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:textSize="18sp"
+            android:gravity="left|center"
+            android:layout_margin="5dp"
+            android:layout_height="50dp" />
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:id="@+id/RGroup">
+
+        <RadioButton
+            android:id="@+id/yesRB"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="10dp"
+            android:textSize="18sp"
+            android:textColor="#808080"
+            android:buttonTint="#808080"
+            android:text="Yes" />
+        <RadioButton
+            android:id="@+id/noRB"
+            android:layout_width="wrap_content"
+            android:paddingRight="20dp"
+            android:textSize="18sp"
+            android:buttonTint="#808080"
+            android:textColor="#808080"
+            android:layout_height="match_parent"
+            android:text="No" />
+        </RadioGroup>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -97,7 +143,7 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_gravity="center|left"
             android:layout_margin="5dp"
             android:text="Close"
@@ -108,7 +154,7 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_gravity="center|right"
             android:layout_margin="5dp"
             android:text="submit"
