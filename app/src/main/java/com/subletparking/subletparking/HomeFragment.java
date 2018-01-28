@@ -70,7 +70,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.home_layout, container, false);
 
+
+
         mSearchView = (FloatingSearchView) myView.findViewById(R.id.floating_search_view);
+        mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
+        mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
         try {

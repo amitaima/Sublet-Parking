@@ -5,9 +5,11 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.DrawerLayout;
 import android.telecom.Call;
 import android.text.InputType;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import retrofit2.Callback;
@@ -32,9 +35,11 @@ public class ProfileFragment extends Fragment {
     Button openDialog;
     Dialog myDialog;
     Button submitButton,close;
-    ImageButton addTimeButton;
+    ImageButton addTimeButton, menuButton;
     EditText insertAddress, insertTimeStart, insertTimeEnd, insertPrice;
     String address, timeStart, timeEnd;
+    DrawerLayout mDrawerLayout;
+    ListView mDrawerList;
     int price;
     public int numberOfLines = 1;
 
@@ -44,6 +49,17 @@ public class ProfileFragment extends Fragment {
         myView = inflater.inflate(R.layout.profile_layout, container, false);
         ap = (MyApplication)((ParkingSpotListActivity)this.getActivity()).getApplication();
         openDialog = (Button) myView.findViewById(R.id.addParkingButton);
+        menuButton = (ImageButton) myView.findViewById(R.id.menuButton1);
+        mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
+
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.openDrawer(Gravity.LEFT);
+
+            }
+        });
+
         openDialog.setOnClickListener(new View.OnClickListener() {
            @Override
             public void onClick(View v){
