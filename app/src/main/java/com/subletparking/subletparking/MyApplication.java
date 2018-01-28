@@ -38,6 +38,8 @@ public class MyApplication extends Application {
         Call<List<Parking>> getHomePage();
         @POST("insertparking/")
         Call<Parking> insertParking(@Body Parking parking);
+        @GET("userparking/{id}")
+        Call<String> hasParking(@Path("id") long id);
     }
     public MyApiEndpointInterface apiService = retrofit.create(MyApiEndpointInterface.class);
 
@@ -48,7 +50,6 @@ public class MyApplication extends Application {
     public long getUserId() {
         return userId;
     }
-
     public void setUserId(long id) {
         userId = id;
     }
