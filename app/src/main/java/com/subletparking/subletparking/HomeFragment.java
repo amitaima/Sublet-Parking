@@ -3,11 +3,16 @@ package com.subletparking.subletparking;
 import android.app.Fragment;
 import android.app.ListActivity;
 import android.content.Context;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +23,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.support.v7.widget.SearchView;
 import android.widget.Toast;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 //retrofit
@@ -25,10 +32,15 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 import java.lang.Exception;
+import java.util.Locale;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.facebook.FacebookButtonBase;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.identity.intents.Address;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -37,6 +49,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.vision.barcode.Barcode;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
@@ -47,6 +60,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.http.*;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static android.R.attr.name;
+import static android.content.Context.LOCATION_SERVICE;
+
+import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.model.*;
+
 
 /**
  * Created by User on 12/18/2017.
@@ -76,6 +96,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
         mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+
+
 
         /*MyApplication ap = (MyApplication)((ParkingSpotListActivity)this.getActivity()).getApplication();
         Call<List<Parking>> call = ap.getApiService().getHomePage();
@@ -118,20 +140,31 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         }
     }
 
-    @Override
+
+    //@Override
     public void onMapReady(GoogleMap googleMap) {
 
         MapsInitializer.initialize(getActivity());
         mGoogleMap = googleMap;
         googleMap.setMapType((GoogleMap.MAP_TYPE_NORMAL));
 
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(40.689247, -74.044502)).title("Statue of liberty"));
 
-        CameraPosition Liberty = CameraPosition.builder().target(new LatLng(40.689247, -74.044502)).zoom(16).bearing(0).tilt(45).build();
+        googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(32.793523, 35.037458))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.location_parking_pin1))
+                .title("lev hamifratz"));
+        googleMap.addMarker(new MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.location_parking_pin1))
+                .title("moreshet, levona 294")
+                .position(new LatLng(32.824685, 35.234116)));
+
+
+        CameraPosition Liberty = CameraPosition.builder().target(new LatLng(32.824685, 35.234116)).zoom(16).bearing(0).build();
 
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(Liberty));
 
     }
+
 
     public void searchParking() {
         Toast.makeText(getActivity(), "searching...", Toast.LENGTH_LONG).show(); // Makes a small message.
