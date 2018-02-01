@@ -96,6 +96,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
         mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
+        try {
+            mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
+        }
+        catch (Exception e){
+            String s = e.getMessage();
+            Toast.makeText(getActivity() ,e.getMessage(), Toast.LENGTH_SHORT).show();}
 
 
 
@@ -124,6 +131,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
             strs[i] = strs[i].concat(String.valueOf(parkings.get(i).getCostPerHour()));
             strs[i] = strs[i].concat(" per hour\nRating: ");
             strs[i] = strs[i].concat(String.valueOf(parkings.get(i).getRating()));
+            strs[i] = strs[i].concat(" per hour\nStatus: ");
+            strs[i] = parkings.get(i).getIsTaken() ? strs[i].concat("Taken!") : strs[i].concat("Available");
+            strs[i] = parkings.get(i).getIsGate() ? strs[i].concat("Taken!") : strs[i].concat("Available");
         }
         return strs;
     }
