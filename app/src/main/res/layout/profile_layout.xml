@@ -3,6 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/hasParkingAns"
+        android:layout_marginTop="180pt"
+        android:layout_centerHorizontal="true"
+        android:layout_width="100pt"
+        android:layout_height="50pt"
+        android:textAlignment="center"/>
+
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="match_parent"
