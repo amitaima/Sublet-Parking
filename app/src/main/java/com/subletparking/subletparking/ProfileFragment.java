@@ -102,7 +102,6 @@ public class ProfileFragment extends Fragment {
                 // write here the function to add the Parking to server.
                 try {
                     long id = ap.getUserId();
-
                     //get all of the info from the layout
                     address = insertAddress.getText().toString();
                     timeStart = insertTimeStart.getText().toString();
@@ -178,5 +177,22 @@ public class ProfileFragment extends Fragment {
             public void onFailure(retrofit2.Call<Parking> call, Throwable t) {}
         });
     }
+    public void getHasParking() {
+        ap.getApiService().hasParking(ap.getUserId()).enqueue(new Callback<String>() {
+            TextView ans = (TextView)myView.findViewById(R.id.hasParkingAns);
+            @Override
+            public void onResponse(retrofit2.Call<String> call, Response<String> response) {
+                //deteremine whether there is already a saved parking
+                if(response.isSuccessful()) {
+                    String txt = (response.body().equals("success"))? "This user has a parking saved in the database" : "This user has no parking saved in the database";
+                    ans.setText(txt);
+                }
+
+            }
+            @Override
+            public void onFailure(retrofit2.Call<String> call, Throwable t) {ans.setText(t.getMessage());}
+        });
+    }
+
 }
 
