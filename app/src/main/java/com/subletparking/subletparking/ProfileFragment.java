@@ -22,9 +22,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -88,6 +88,7 @@ public class ProfileFragment extends Fragment {
         insertTimeStart = (EditText)myDialog.findViewById(R.id.insertTimeStart);
         insertTimeEnd = (EditText)myDialog.findViewById(R.id.insertTimeEnd);
         insertPrice = (EditText)myDialog.findViewById(R.id.insertPrice);
+
         submitButton.setEnabled(true);
         close.setEnabled(true);
         addTimeButton.setEnabled(true);
@@ -100,6 +101,7 @@ public class ProfileFragment extends Fragment {
                 // write here the function to add the Parking to server.
                 try {
                     long id = ap.getUserId();
+
                     //get all of the info from the layout
                     address = insertAddress.getText().toString();
                     timeStart = insertTimeStart.getText().toString();
