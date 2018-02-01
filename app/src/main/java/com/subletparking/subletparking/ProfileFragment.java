@@ -3,6 +3,8 @@ package com.subletparking.subletparking;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
@@ -77,7 +79,7 @@ public class ProfileFragment extends Fragment {
         myDialog = new Dialog(getActivity());
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         myDialog.setContentView(R.layout.customdialog);
-        myDialog.setTitle("My custom dialog");
+        myDialog.setTitle("Add Parking Dialog");
 
         submitButton = (Button)myDialog.findViewById(R.id.submitButton);
         close = (Button)myDialog.findViewById(R.id.close);
