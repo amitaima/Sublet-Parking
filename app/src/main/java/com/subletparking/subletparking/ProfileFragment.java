@@ -62,7 +62,7 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-
+        getHasParking();
         openDialog.setOnClickListener(new View.OnClickListener() {
            @Override
             public void onClick(View v){
@@ -86,9 +86,6 @@ public class ProfileFragment extends Fragment {
         insertTimeStart = (EditText)myDialog.findViewById(R.id.insertTimeStart);
         insertTimeEnd = (EditText)myDialog.findViewById(R.id.insertTimeEnd);
         insertPrice = (EditText)myDialog.findViewById(R.id.insertPrice);
-
-        getHasParking();
-
         submitButton.setEnabled(true);
         close.setEnabled(true);
         addTimeButton.setEnabled(true);
