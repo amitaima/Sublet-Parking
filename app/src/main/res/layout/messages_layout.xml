@@ -7,22 +7,21 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="Messages page"
+        android:layout_below="@+id/menuButton1"
+        android:textStyle="bold"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Messages page" />
+        android:layout_marginTop="250dp" />
 
-    <com.dd.ShadowLayout
+    <TextView
+        android:id="@+id/underConstructionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:sl_shadowRadius="2dp"
-        app:sl_shadowColor="#AA000000"
-        app:sl_dx="0dp"
-        app:sl_dy="0dp"
-        app:sl_cornerRadius="100dp"
-        android:layout_marginStart="9dp"
-        android:layout_marginTop="14dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:text="Page under construction, will be available in further updates"
+        android:layout_marginTop="17dp"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true" />
 
         <ImageButton
             android:id="@+id/menuButton1"
@@ -30,10 +29,9 @@
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_menu_black_24dp"
+            android:tint="@color/colorPrimaryDark"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true" />
-
-    </com.dd.ShadowLayout>
 </RelativeLayout>
