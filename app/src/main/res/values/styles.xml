@@ -8,6 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="appThemeRed" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorAccentRed</item>
+        <item name="colorPrimaryDark">@color/red</item>
+        <item name="colorAccent">@color/colorAccentRed</item>
+    </style>
+
     <style name="Facebook.Button" parent="Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">@color/blue</item>
         <item name="android:textColor">@color/white</item>

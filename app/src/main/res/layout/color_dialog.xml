@@ -61,7 +61,7 @@
             app:sl_dx="0dp"
             app:sl_dy="0dp"
             app:sl_cornerRadius="100dp"
-            app:sl_fillColor="@color/red"
+            app:sl_fillColor="@color/colorAccentRed"
             android:layout_marginTop="14dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true">
@@ -84,7 +84,7 @@
             app:sl_dx="0dp"
             app:sl_dy="0dp"
             app:sl_cornerRadius="100dp"
-            app:sl_fillColor="@color/green"
+            app:sl_fillColor="@color/colorAccentGreen"
             android:layout_marginTop="14dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true">
@@ -107,7 +107,7 @@
             app:sl_dx="0dp"
             app:sl_dy="0dp"
             app:sl_cornerRadius="100dp"
-            app:sl_fillColor="@color/pink"
+            app:sl_fillColor="@color/colorAccentPink"
             android:layout_marginTop="14dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true">
@@ -130,7 +130,7 @@
             app:sl_dx="0dp"
             app:sl_dy="0dp"
             app:sl_cornerRadius="100dp"
-            app:sl_fillColor="@color/yellow"
+            app:sl_fillColor="@color/colorAccentYellow"
             android:layout_marginTop="14dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true">

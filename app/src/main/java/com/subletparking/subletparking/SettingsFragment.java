@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.NumberPicker;
 import android.widget.Switch;
 
 import com.facebook.login.LoginManager;
@@ -61,8 +62,7 @@ public class SettingsFragment extends Fragment {
         fontSizeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDrawerLayout.openDrawer(Gravity.LEFT);
-
+                myTextDialog();
             }
         });
 
@@ -129,4 +129,37 @@ public class SettingsFragment extends Fragment {
 
 
     }
+
+    public void myTextDialog() {
+        myDialog = new Dialog(getActivity());
+        myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        myDialog.setContentView(R.layout.text_size_dialog);
+        myDialog.setTitle("App Text Size");
+        myDialog.show();
+
+        Button closeButton = (Button) myDialog.findViewById(R.id.close);
+        Button submitButton = (Button) myDialog.findViewById(R.id.submitButton);
+        NumberPicker np = (NumberPicker) myDialog.findViewById(R.id.textSizeNP);
+
+        np.setMinValue(10);
+        np.setMaxValue(20);
+        np.setWrapSelectorWheel(true);
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.cancel();
+            }
+        });
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.cancel();
+            }
+        });
+
+
+    }
+
 }
