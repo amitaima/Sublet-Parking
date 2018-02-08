@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -91,7 +92,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         myView = inflater.inflate(R.layout.home_layout, container, false);
 
 
-
         mSearchView = (FloatingSearchView) myView.findViewById(R.id.floating_search_view);
         mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
         mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
@@ -99,43 +99,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
         try {
             mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             String s = e.getMessage();
-            Toast.makeText(getActivity() ,e.getMessage(), Toast.LENGTH_SHORT).show();}
-
-
-
-        /*MyApplication ap = (MyApplication)((ParkingSpotListActivity)this.getActivity()).getApplication();
-        Call<List<Parking>> call = ap.getApiService().getHomePage();
-        try {
-        call.enqueue(new Callback<List<Parking>>(){
-            @Override
-            public void onClick(View v) {
-                searchParking();
-            }
-        });
-        } catch(Exception e){Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();}//try getting the page;*/
-        return myView;
-    }
-    public String[] parkingsToString(List<Parking> parkings) {
-        int pSize = parkings.size();
-        String[] strs = new String[pSize];
-        for (int i = 0; i < pSize; i++) {
-            strs[i] = "";
-            strs[i] = strs[i].concat("Adress: ");
-            strs[i] = strs[i].concat(parkings.get(i).getAddress());
-            strs[i] = strs[i].concat("\nHours: ");
-            strs[i] = strs[i].concat(parkings.get(i).getHours());
-            strs[i] = strs[i].concat("\nFor: ");
-            strs[i] = strs[i].concat(String.valueOf(parkings.get(i).getCostPerHour()));
-            strs[i] = strs[i].concat(" per hour\nRating: ");
-            strs[i] = strs[i].concat(String.valueOf(parkings.get(i).getRating()));
-            strs[i] = strs[i].concat(" per hour\nStatus: ");
-            strs[i] = parkings.get(i).getIsTaken() ? strs[i].concat("Taken!") : strs[i].concat("Available");
-            strs[i] = parkings.get(i).getIsGate() ? strs[i].concat("Taken!") : strs[i].concat("Available");
+            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        return strs;
+        return myView;
     }
 
     @Override
@@ -150,6 +118,36 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         }
     }
 
+    public void getParkings()
+    {
+        MyApplication ap = (MyApplication)((ParkingSpotListActivity)this.getActivity()).getApplication();
+        Call<List<Parking>> call = ap.getApiService().getHomePage();
+        try {
+            call.enqueue(new Callback<List<Parking>>(){
+                @Override
+                public void onResponse(Call<List<Parking>> call, Response<List<Parking>> response) {
+                    int statusCode = response.code();
+                    List<Parking> parkingPage = response.body();
+                    for (int i=0; i<parkingPage.size();i++)
+                    {
+                        LatLng l = new LatLng(parkingPage.get(i).getLongitude(), parkingPage.get(i).getLatitude());
+                        mGoogleMap.addMarker(new MarkerOptions()
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.location_parking_pin1))
+                                .title(parkingPage.get(i).getAddress())
+                                .position(l));
+                    }
+                }
+                @Override
+                public void onFailure(Call<List<Parking>> call, Throwable t) {
+                    // Log error here since request failedString[] parkings = parkingsToString(parkingPage);
+                    Snackbar mySnackbar = Snackbar.make(getView(), t.getMessage(), Snackbar.LENGTH_LONG);
+                    mySnackbar.show();
+                }
+            });
+        } catch(Exception e)
+            {Snackbar mySnackbar = Snackbar.make(getView(), e.getMessage(), Snackbar.LENGTH_LONG);
+            mySnackbar.show();}//try getting the page;*/
+    }
 
     //@Override
     public void onMapReady(GoogleMap googleMap) {
@@ -172,35 +170,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         CameraPosition Liberty = CameraPosition.builder().target(new LatLng(32.824685, 35.234116)).zoom(16).bearing(0).build();
 
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(Liberty));
-
+        getParkings();
     }
 
 
     public void searchParking() {
         Toast.makeText(getActivity(), "searching...", Toast.LENGTH_LONG).show(); // Makes a small message.
-        /*MyApplication ap = (MyApplication)((ParkingSpotListActivity)this.getActivity()).getApplication();
-        Call<List<Parking>> call = ap.getApiService().getHomePage();
-        try {
-            call.enqueue(new Callback<List<Parking>>(){
-                @Override
-                public void onResponse(Call<List<Parking>> call, Response<List<Parking>> response) {
-                    int statusCode = response.code();
-                    List<Parking> parkingPage = response.body();
-                    String[] parkings = parkingsToString(parkingPage);
-                    ListAdapter listAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, parkings);
-                    ListView listview = (ListView) myView.findViewById(R.id.listView);
-                    listview.setAdapter(listAdapter);
-                }
-                @Override
-                public void onFailure(Call<List<Parking>> call, Throwable t) {
-                    // Log error here since request failedString[] parkings = parkingsToString(parkingPage);
-                    String[] parkings = {"1", "2", "3",t.getMessage()};
-                    ListAdapter listAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, parkings);
-                    ListView listview = (ListView) myView.findViewById(R.id.listView);
-                    listview.setAdapter(listAdapter);
-                }
-            });
-        } catch(Exception e){Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();}//try getting the page;*/
     }
 }
 
