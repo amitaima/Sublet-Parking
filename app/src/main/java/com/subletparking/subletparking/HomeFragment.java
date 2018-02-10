@@ -1,5 +1,6 @@
 package com.subletparking.subletparking;
 
+
 import android.app.Fragment;
 import android.app.ListActivity;
 import android.content.Context;
@@ -14,12 +15,15 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.support.v7.widget.SearchView;
@@ -67,6 +71,10 @@ import static android.content.Context.LOCATION_SERVICE;
 
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
 
 /**
@@ -80,6 +88,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
     View myView;
     FloatingSearchView mSearchView;
     DrawerLayout mDrawerLayout;
+    PlaceAutocompleteFragment placeAutoComplete;
 
     private Button searchButton;
     private ListView listview;
@@ -91,18 +100,45 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.home_layout, container, false);
 
-
-        mSearchView = (FloatingSearchView) myView.findViewById(R.id.floating_search_view);
+        //mSearchView = (FloatingSearchView) myView.findViewById(R.id.floating_search_view);
         mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
-        mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
+        //mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-        mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
-        try {
-            mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
-        } catch (Exception e) {
-            String s = e.getMessage();
-            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+
+        /*mSearchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchParking("new york");
+            }
+        });*/
+
+        placeAutoComplete = (PlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.floating_search_view);
+        ImageView searchIcon = (ImageView)((LinearLayout)placeAutoComplete.getView()).getChildAt(0);
+
+// Set the desired icon
+        searchIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_black_24dp));
+
+        searchIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDrawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
+
+        placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+
+                Log.d("Maps", "Place selected: " + place.getName());
+            }
+
+            @Override
+            public void onError(Status status) {
+                Log.d("Maps", "An error occurred: " + status);
+            }
+        });
+
+
         return myView;
     }
     public String[] parkingsToString(List<Parking> parkings) {
@@ -190,7 +226,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
     }
 
 
-    public void searchParking() {
+    public void searchParking(String strAddress) {
         Toast.makeText(getActivity(), "searching...", Toast.LENGTH_LONG).show(); // Makes a small message.
         /*MyApplication ap = (MyApplication)((ParkingSpotListActivity)this.getActivity()).getApplication();
         Call<List<Parking>> call = ap.getApiService().getHomePage();
