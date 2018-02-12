@@ -48,7 +48,7 @@ import retrofit2.Response;
  * Created by User on 12/18/2017.
  */
 
-public class HomeFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnCameraIdleListener {
+public class HomeFragment extends Fragment implements OnMapReadyCallback{
 
     GoogleMap mGoogleMap;
     MapView mMapView;
@@ -106,7 +106,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
                 Log.d("Maps", "An error occurred: " + status);
             }
         });
-
 
         return myView;
     }
@@ -169,10 +168,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
             {Snackbar mySnackbar = Snackbar.make(getView(), e.getMessage(), Snackbar.LENGTH_LONG);
             mySnackbar.show();}//try getting the page;*/
     }
-    @Override
-    public void onCameraIdle(){
-        CameraPosition curr = mGoogleMap.getCameraPosition();
-    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
@@ -180,6 +176,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         mGoogleMap = googleMap;
         googleMap.setMapType((GoogleMap.MAP_TYPE_NORMAL));
 
+        mGoogleMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                CameraPosition curr = mGoogleMap.getCameraPosition();
+            }
+        });
 
         googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(32.793523, 35.037458))
