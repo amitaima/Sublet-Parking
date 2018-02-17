@@ -52,7 +52,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.profile_layout, container, false);
-        ap = (MyApplication)((ParkingSpotListActivity)this.getActivity()).getApplication();
+        ap = (MyApplication) this.getActivity().getApplication();
         openDialog = (Button) myView.findViewById(R.id.addParkingButton);
         menuButton = (ImageButton) myView.findViewById(R.id.menuButton1);
         mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
@@ -60,7 +60,7 @@ public class ProfileFragment extends Fragment {
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDrawerLayout.openDrawer(Gravity.LEFT);
+                mDrawerLayout.openDrawer(Gravity.START);
 
             }
         });
@@ -167,10 +167,10 @@ public class ProfileFragment extends Fragment {
     public void sendParking(Parking park) {
             ap.getApiService().insertParking(park).enqueue(new Callback<Parking>() {
             @Override
-            public void onResponse(retrofit2.Call<Parking> call, Response<Parking> response) {
-
+            public void onResponse(retrofit2.Call<Parking> call, Response<Parking> response)
+            {
                 if(response.isSuccessful()) {
-                    Toast.makeText(getActivity(), response.body().toString(), Toast.LENGTH_LONG);
+                    Toast.makeText(getActivity(), response.body().toString(), Toast.LENGTH_LONG).show();
                 }
             }
             @Override
@@ -187,7 +187,6 @@ public class ProfileFragment extends Fragment {
                     String txt = (response.body().equals("success"))? "This user has a parking saved in the database" : "This user has no parking saved in the database";
                     ans.setText(txt);
                 }
-
             }
             @Override
             public void onFailure(retrofit2.Call<String> call, Throwable t) {ans.setText(t.getMessage());}

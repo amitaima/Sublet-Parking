@@ -57,14 +57,15 @@
         <!--Maps Android Key-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBE24kO8yLjBGfhJ0lmhx7SanrzsTurD7Y"/>
+            android:value="AIzaSyBJWnXKj8Zb2YwGAYgMuVxNWHkse5vAgFw"/>
+            <!--android:value="AIzaSyBJWnXKj8Zb2YwGAYgMuVxNWHkse5vAgFw"/>-->
         <!--Maps-->
 
+        <uses-feature
+            android:glEsVersion="0x00020000"
+            android:required="true"/>
     </application>
 
-    <uses-feature
-        android:glEsVersion="0x00020000"
-        android:required="true"/>
 
 </manifest>
 
