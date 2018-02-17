@@ -1,6 +1,7 @@
 package com.subletparking.subletparking;
 
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.TimeUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,9 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import java.util.Arrays;
+import java.util.Timer;
+
+import okio.Timeout;
 
 import static android.R.attr.data;
 import static java.security.AccessController.getContext;
@@ -35,24 +39,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loginbutton = (LoginButton)findViewById(R.id.facebook_login_button);
+
         // FOR NOW THAT WAY YOU DONT NEED TO LOGOUT AND IN EVERY TIME///////////////////
-        LoginManager.getInstance().logOut();
+//        LoginManager.getInstance().logOut();
         //////////////////////////////////////////////////////////////////////////////
         final MyApplication ap = ((MyApplication)this.getApplication());
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         //info = (TextView)findViewById(R.id.info);
         loginbutton.setReadPermissions("email");
-        // For connecting when connected
-        /*boolean loggedIn = AccessToken.getCurrentAccessToken() == null;
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
-        if (loggedIn)
-        {//loggedIn = AccessToken.getCurrentAccessToken() == null;
-            //String id = AccessToken.getCurrentAccessToken().getUserId();
-            String id = "amitai";
-            ap.setUserId(id);
-            fbLoginSuccessfull(id);
-        }*/
 
         // Callback registration
         loginbutton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -74,12 +69,19 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+        // For connecting when connected
 
+        AccessToken loggedIn = AccessToken.getCurrentAccessToken();
+        if (loggedIn!=null)
+        {//loggedIn = AccessToken.getCurrentAccessToken() == null;
+            String id = loggedIn.getUserId();
+            ap.setUserId(Long.parseLong(id));
+            fbLoginSuccessfull(id);
+        }
         ////////Set status bar color///////////
         Window window = this.getWindow();
         // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(this,R.color.colorAccent));
-
     }
 
     public void fbLoginSuccessfull(String userId) {
