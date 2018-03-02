@@ -21,7 +21,6 @@
         android:text="See something not okay?
 Have an idea to make our app better?
 Please contact us!"
-        android:textSize="20sp"
         android:layout_marginBottom="34dp"
         android:layout_above="@+id/contactWays"
         android:layout_centerHorizontal="true" />
@@ -33,7 +32,6 @@ Please contact us!"
         android:gravity="center"
         android:text="Phone: +9720584966113\nGmail: amitai.malka@gmail.com"
         android:layout_marginBottom="48dp"
-        android:textSize="20sp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 

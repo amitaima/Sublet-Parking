@@ -89,49 +89,44 @@
         android:inputType="numberDecimal"
         android:hint="price per hour" />
 
+    <EditText
+        android:id="@+id/insertDescription"
+        android:layout_width="300dp"
+        android:layout_margin="10dp"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="parking description" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
-            android:text="Gate"
-            android:layout_gravity="center"
+            android:hint="Parking size"
             android:layout_weight="1"
-            android:paddingLeft="10dp"
+            android:layout_gravity="center"
             android:textSize="18sp"
-            android:gravity="left|center"
             android:layout_margin="5dp"
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:id="@+id/parkingSizeSpinner"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
             android:layout_height="50dp" />
 
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:id="@+id/RGroup">
-
-        <RadioButton
-            android:id="@+id/yesRB"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingRight="10dp"
-            android:textSize="18sp"
-            android:textColor="#808080"
-            android:buttonTint="#808080"
-            android:text="Yes" />
-        <RadioButton
-            android:id="@+id/noRB"
-            android:layout_width="wrap_content"
-            android:paddingRight="20dp"
-            android:textSize="18sp"
-            android:buttonTint="#808080"
-            android:textColor="#808080"
-            android:layout_height="match_parent"
-            android:text="No" />
-        </RadioGroup>
-
     </LinearLayout>
+    <Switch
+            android:id="@+id/notificationSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textSize="19dp"
+            android:hint="Gate"
+            android:paddingLeft="15dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -142,10 +137,10 @@
             android:id="@+id/close"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="50dp"
             android:layout_gravity="center|left"
             android:layout_margin="5dp"
+            android:layout_weight="1"
             android:text="Close"
             android:textStyle="bold" />
 
@@ -153,10 +148,10 @@
             android:id="@+id/submitButton"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="50dp"
             android:layout_gravity="center|right"
             android:layout_margin="5dp"
+            android:layout_weight="1"
             android:text="submit"
             android:textStyle="bold" />
 
