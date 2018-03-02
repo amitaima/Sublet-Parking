@@ -12,6 +12,7 @@
     <color name="blue">#0011ff</color>
     <color name="grey">#a7a7a7</color>
     <color name="textGrey">#808080</color>
+    <color name="lightGrey">#e4e4e4</color>
     <color name="darkGrey">#747474</color>
     <color name="yellow">#FFFF00</color>
     <color name="white">#ffffff</color>
