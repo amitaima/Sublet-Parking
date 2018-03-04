@@ -74,8 +74,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
     TextView addressText, numberOfRatings, priceText, availableTimeText, distanceText, parkingSizeText, gateText, parkingDescriptionText, sumPriceText;
     DatePicker datePicker;
     TimePicker timePicker;
-    String year, month, day, startTime, endTime, date;
+    String year, month, day, startTime, endTime, date, sentButtonId;
     int hour, minute, startHour, startMinute, endHour, endMinute;
+    boolean pickedDate = false, pickedStartTime = false, pickedEndTime = false;
 
     @Nullable
     @Override
@@ -263,7 +264,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
 
     }
 
-    public void myOrderDialog() {
+    public void myOrderDialog () {
         myDialog = new Dialog(getActivity());
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         myDialog.setContentView(R.layout.order_dialog);
@@ -277,16 +278,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         close = (Button)myDialog.findViewById(R.id.close);
         sumPriceText = (TextView)myDialog.findViewById(R.id.sumPriceText);
 
-
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 myDialog.cancel(); // Exits existing dialog
                 dateDialog();
-                date = year + "/" + month + "/" + day;
-                dateButton.setHint(date);
-                int price = 12; // get price of parking here
-                sumPriceText.setText("Price: " + price*(endHour - startHour));
             }
         });
 
@@ -294,13 +290,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
             @Override
             public void onClick(View v) {
                 myDialog.cancel(); // Exits existing dialog
-                timeDialog();
-                startHour = hour;
-                startMinute = minute;
-                startTime = String.valueOf(hour) + ":" + String.valueOf(minute);
-                startTimeButton.setText(startTime);
-                int price = 12; // get price of parking here
-                sumPriceText.setText("Price: " + price*(endHour - startHour));
+                timeDialog(1);
             }
         });
 
@@ -308,15 +298,41 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
             @Override
             public void onClick(View v) {
                 myDialog.cancel(); // Exits existing dialog
-                timeDialog();
-                startHour = hour;
-                startMinute = minute;
-                endTime = String.valueOf(hour) + ":" + String.valueOf(minute);
-                endTimeButton.setHint(endTime);
-                int price = 12; // get price of parking here
-                sumPriceText.setText("Price: " + price*(endHour - startHour));
+                timeDialog(2);
             }
         });
+
+        if (pickedDate == true)
+        {
+            date = year + "/" + month + "/" + day;
+            dateButton.setHint(date);
+        }
+        if (pickedStartTime == true)
+        {
+            if (startMinute <10)
+            {
+                startTime = String.valueOf(startHour) + ":" + "0" + String.valueOf(startMinute);
+            }
+            else
+            {
+                startTime = String.valueOf(startHour) + ":" + String.valueOf(startMinute);
+            }
+            startTimeButton.setText(startTime);
+        }
+        if (pickedEndTime == true)
+        {
+            if (endMinute <10)
+            {
+                endTime = String.valueOf(endHour) + ":" + "0" + String.valueOf(endMinute);
+            }
+            else
+            {
+                endTime = String.valueOf(endHour) + ":" + String.valueOf(endMinute);
+            }
+            endTimeButton.setHint(endTime);
+            int price = 12; // get price of parking here
+            sumPriceText.setText("Price: " + price*(endHour - startHour));
+        }
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -335,7 +351,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
 
     }
 
-    public void timeDialog() {
+    public void timeDialog(final int id) {
         myDialog = new Dialog(getActivity());
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         myDialog.setContentView(R.layout.time_dialog);
@@ -346,13 +362,24 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         close = (Button)myDialog.findViewById(R.id.close);
         timePicker = (TimePicker)myDialog.findViewById(R.id.timePicker);
 
-        hour = timePicker.getCurrentHour(); // Getting time and making it from int to string
-        minute = timePicker.getCurrentMinute();
-
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 myDialog.cancel(); // Exits existing dialog
+                hour = timePicker.getCurrentHour(); // Getting time and making it from int to string
+                minute = timePicker.getCurrentMinute();
+                if(id == 1)
+                {
+                    pickedStartTime = true;
+                    startHour = hour;
+                    startMinute = minute;
+                }
+                else
+                {
+                    pickedEndTime = true;
+                    endHour = hour;
+                    endMinute = minute;
+                }
                 myOrderDialog(); // with changes
             }
         });
@@ -361,6 +388,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
             @Override
             public void onClick(View v) {
                 myDialog.cancel(); // Exits existing dialog
+                if(id == 1)
+                {
+                    pickedStartTime = false;
+                }
+                else
+                {
+                    pickedEndTime = false;
+                }
                 myOrderDialog(); // without changes
             }
         });
@@ -387,6 +422,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
             @Override
             public void onClick(View v) {
                 myDialog.cancel(); // Exits existing dialog
+                year = String.valueOf(datePicker.getYear()); // Getting date and making it from int to string
+                month = String.valueOf(datePicker.getMonth()+1);
+                day = String.valueOf(datePicker.getDayOfMonth());
+                pickedDate=true;
                 myOrderDialog(); // with changes
             }
         });
@@ -395,10 +434,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
             @Override
             public void onClick(View v) {
                 myDialog.cancel(); // Exits existing dialog
+                pickedDate=false;
                 myOrderDialog(); // without changes
             }
         });
-
     }
 }
 
