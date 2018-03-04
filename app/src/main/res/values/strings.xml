@@ -11,6 +11,13 @@
     <string name="fb_login_protocol_scheme">fb1547265125356015</string>
     <string name="title_activity_test">testActivity</string>
 
+    <string-array name="sizes_array">
+        <item>small</item>
+        <item>medium</item>
+        <item>big</item>
+        <item>huge</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="wut_text">nothing yet, sorry</string>
