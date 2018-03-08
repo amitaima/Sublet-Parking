@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,8 +44,8 @@ public class ProfileFragment extends Fragment {
     Dialog myDialog;
     Button submitButton,close;
     ImageButton addTimeButton, menuButton;
-    EditText insertAddress, insertTimeStart, insertTimeEnd, insertPrice;
-    String address, timeStart, timeEnd;
+    EditText insertAddress, insertTimeStart, insertTimeEnd, insertPrice, insertDescription;
+    String address, timeStart, timeEnd, size, description;
     DrawerLayout mDrawerLayout;
     ListView mDrawerList;
     int price;
@@ -90,6 +91,7 @@ public class ProfileFragment extends Fragment {
         insertTimeStart = (EditText)myDialog.findViewById(R.id.insertTimeStart);
         insertTimeEnd = (EditText)myDialog.findViewById(R.id.insertTimeEnd);
         insertPrice = (EditText)myDialog.findViewById(R.id.insertPrice);
+        insertDescription = (EditText)myDialog.findViewById(R.id.insertDescription);
         Spinner spinner = (Spinner) myDialog.findViewById(R.id.parkingSizeSpinner);
 // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
@@ -98,7 +100,12 @@ public class ProfileFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-
+        spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                size = (String)parent.getItemAtPosition(position);
+            }
+        });
 
         submitButton.setEnabled(true);
         close.setEnabled(true);
@@ -118,10 +125,11 @@ public class ProfileFragment extends Fragment {
                     timeStart = insertTimeStart.getText().toString();
                     timeEnd = insertTimeEnd.getText().toString();
                     price = Integer.parseInt(insertPrice.getText().toString());
+                    description = insertDescription.getText().toString();//CRASHES
                     /////////////////////////////////////
 
-                    Parking parking = new Parking(id, 3.3, 3.3, address, timeStart + " to " + timeEnd, price, 0, 0, false, false);
-                    //Parking parking = new Parking(id, 3.3, 3.3, "moreshet 101", "1 to 3", 12, 0, 0); //demo parking
+                    Parking parking = new Parking(id, 33.33, 33.33, address, timeStart + " to " + timeEnd, price, 0, 0, size, description, false);
+                    //demo parking; still needs: picker from a map to get both address and lat/lon,
                     sendParking(parking);
                     //get the application (MyApplication) from the activity; then get the id from the application (MyApplication)
                 } catch (Throwable e) {
