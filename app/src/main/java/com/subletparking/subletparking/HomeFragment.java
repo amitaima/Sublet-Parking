@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import java.text.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -43,7 +44,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -74,7 +79,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
     TextView addressText, numberOfRatings, priceText, availableTimeText, distanceText, parkingSizeText, gateText, parkingDescriptionText, sumPriceText;
     DatePicker datePicker;
     TimePicker timePicker;
-    String year, month, day, startTime, endTime, date, sentButtonId;
+    String year, month, day, startTime, endTime, date, date2, sentButtonId;
     int hour, minute, startHour, startMinute, endHour, endMinute;
     boolean pickedDate = false, pickedStartTime = false, pickedEndTime = false;
 
@@ -82,23 +87,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.home_layout, container, false);
-
-        //mSearchView = (FloatingSearchView) myView.findViewById(R.id.floating_search_view);
         mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
-        //mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-
-        /*mSearchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchParking("new york");
-            }
-        });*/
-
         placeAutoComplete = (PlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.floating_search_view);
         final ImageView searchIcon = (ImageView)((LinearLayout)placeAutoComplete.getView()).getChildAt(0);
 
-// Set the desired icon
+        // Set the desired icon
         searchIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_black_24dp));
         // Change the icon to grey //
         searchIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark), android.graphics.PorterDuff.Mode.SRC_IN);
@@ -156,7 +150,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.location_parking_pin1_green))
                                 .title(parkingPage.get(i).getAddress())
-                                .position(l));
+                                .position(l))
+                                .setTag(parkingPage.get(i));
+//needs to be green or red according to some bool from the server for whether it is currently occupied or not, will be added later
                     }
                 }
                 @Override
@@ -227,24 +223,26 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         parkingSizeText = (TextView)myDialog.findViewById(R.id.parkingSizeText);
         gateText = (TextView)myDialog.findViewById(R.id.gateText);
         parkingDescriptionText = (TextView)myDialog.findViewById(R.id.parkingDescriptionText);
-
+        final Parking current = (Parking)marker.getTag();
         addressText.setText(marker.getTitle());
-        //Needs to get these things from the db//
-        float rating= (float)(4.5);
-        ratingBar.setRating(rating);
-        String raters = "(" + "73" + ")";
+
+        double rating = current.getRating();
+        ratingBar.setRating((float)rating);
+        String raters = "(" + Integer.toString(current.getNumberOfRaters()) + ")";
         numberOfRatings.setText(raters);
-        String price = "12" + "₪\nper hour";
+        String price = Integer.toString(current.getCostPerHour()) + "₪\nper hour";
         priceText.setText(price);
-        String time = "Available Time: " + "9:00" + " - " + "16:00";
+        String time = "Unoccupied on: " + current.getHours();
         availableTimeText.setText(time);
-        String distance = "200" + " meters" + " from destination";
+        String distance = "200" + " meters" + " from destination"; //curretly redundant
         distanceText.setText(distance);
-        String size = "medium" + " parking";
+        String size = current.getSize() + " parking";
         parkingSizeText.setText(size);
-        String gate = "Parking with" + "" + " gate";
+        String gate = "with";
+        if (current.getIsGate() == false) {gate = "without";}
+        gate = "Parking " + gate + " a gate";
         gateText.setText(gate);
-        parkingDescriptionText.setText("Go in to the right parking of the two");
+        parkingDescriptionText.setText(current.getDescription());
 
 
         orderButton.setOnClickListener(new View.OnClickListener() {
@@ -304,31 +302,37 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
 
         if (pickedDate == true)
         {
-            date = year + "/" + month + "/" + day;
+            date = year + "-" + month + "-" + day;
+            DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+            Date result = null;
+            try {
+                result =  df.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Calendar c = Calendar.getInstance();
+            c.setTime(result);
+            c.add(Calendar.DATE, 1);
+            Date newDate = c.getTime();
+            date2 = df.format(newDate);
             dateButton.setHint(date);
         }
         if (pickedStartTime == true)
         {
+            if (startHour<10) startTime = "0"; else startTime = ""; //pad with 0
             if (startMinute <10)
-            {
-                startTime = String.valueOf(startHour) + ":" + "0" + String.valueOf(startMinute);
-            }
+                startTime += String.valueOf(startHour) + ":" + "0" + String.valueOf(startMinute) + ":00";//pad with 0s
             else
-            {
-                startTime = String.valueOf(startHour) + ":" + String.valueOf(startMinute);
-            }
+                startTime += String.valueOf(startHour) + ":" + String.valueOf(startMinute) + ":00";//pad with 0s
             startTimeButton.setText(startTime);
         }
         if (pickedEndTime == true)
         {
+            if (endHour < 10) endTime = "0"; else endTime = "";//pad with 0
             if (endMinute <10)
-            {
-                endTime = String.valueOf(endHour) + ":" + "0" + String.valueOf(endMinute);
-            }
+                endTime += String.valueOf(endHour) + ":" + "0" + String.valueOf(endMinute) + ":00";//pad with 0s
             else
-            {
-                endTime = String.valueOf(endHour) + ":" + String.valueOf(endMinute);
-            }
+                endTime += String.valueOf(endHour) + ":" + String.valueOf(endMinute) + ":00";//pad with 0s
             endTimeButton.setHint(endTime);
             int price = 12; // get price of parking here
             sumPriceText.setText("Price: " + price*(endHour - startHour));
@@ -338,7 +342,22 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
             @Override
             public void onClick(View v) {
                 myDialog.cancel(); // Exits existing dialog
-                Toast.makeText(getActivity(), "Order has been submitted\n" + date + "\n" + startTime + " - " + endTime + "\n" + sumPriceText.getText(), Toast.LENGTH_LONG).show(); // Makes a small message.
+                MyApplication ap = (MyApplication) getActivity().getApplication();
+                String startDatetime = date+" "+startTime, endDatetime = date2+" "+endTime;
+                ap.getApiService().requestParking(addressText.getText().toString(), startDatetime, endDatetime).enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(retrofit2.Call<String> call, Response<String> response)
+                    {
+                        if(response.body().equals("available"))
+                            Toast.makeText(getActivity(), "The parking has been successfully oredered!", Toast.LENGTH_LONG).show();
+                        else if (response.body().equals("available"))
+                            Toast.makeText(getActivity(), "Oh no! Looks like the hours you requested aren't available!", Toast.LENGTH_LONG).show();
+                        else Toast.makeText(getActivity(), "Oh no! It seems like a bug as occured, sorry!", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onFailure(retrofit2.Call<String> call, Throwable t) {}
+                });
+                //Toast.makeText(getActivity(), "Order has been submitted\n" + date + "\n" + startTime + " - " + endTime + "\n" + sumPriceText.getText(), Toast.LENGTH_LONG).show(); // Makes a small message.
             }
         });
 
@@ -415,16 +434,20 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         datePicker = (DatePicker)myDialog.findViewById(R.id.datePicker);
 
         year = String.valueOf(datePicker.getYear()); // Getting date and making it from int to string
-        month = String.valueOf(datePicker.getMonth());
-        day = String.valueOf(datePicker.getDayOfMonth());
+        if (datePicker.getMonth()<10) month = "0"; else month = ""; //pad with 0
+        month += String.valueOf(datePicker.getMonth());
+        if (datePicker.getDayOfMonth()<10) day = "0"; else day = ""; //pad with 0
+        day += String.valueOf(datePicker.getDayOfMonth());
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 myDialog.cancel(); // Exits existing dialog
                 year = String.valueOf(datePicker.getYear()); // Getting date and making it from int to string
-                month = String.valueOf(datePicker.getMonth()+1);
-                day = String.valueOf(datePicker.getDayOfMonth());
+                if (datePicker.getMonth()<10) month = "0"; else month = ""; //pad with 0
+                month += String.valueOf(datePicker.getMonth()+1);
+                if (datePicker.getDayOfMonth()<10) day = "0"; else day = ""; //pad with 0
+                day += String.valueOf(datePicker.getDayOfMonth());
                 pickedDate=true;
                 myOrderDialog(); // with changes
             }
