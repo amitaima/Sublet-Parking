@@ -21,7 +21,7 @@ import retrofit2.http.Path;
 
 public class MyApplication extends Application {
     private long userId;
-    public static final String BASE_URL = "http:/10.100.102.224:5000/"; //server url
+    public static final String BASE_URL = "http:/192.168.14.33:5000/"; //server url
     Gson gson = new GsonBuilder()
             .setLenient() //this relaxes the gson a lot, letting it parse malformed JSON as well
             .create();
@@ -40,6 +40,8 @@ public class MyApplication extends Application {
         Call<Parking> insertParking(@Body Parking parking);
         @GET("userparking/{id}")
         Call<String> hasParking(@Path("id") long id);
+        @GET("request/{address}/{OPhour}/{ENDhour}")
+        Call<String> requestParking(@Path("address") String address, @Path("OPhour") String OPhour, @Path("ENDhour") String ENDhour);
     }
     public MyApiEndpointInterface apiService = retrofit.create(MyApiEndpointInterface.class);
 

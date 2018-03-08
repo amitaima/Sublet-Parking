@@ -11,12 +11,13 @@ public class Parking {
     private String address;
     private String hours;
     private int costPerHour;
-    private int ratings;
+    private double ratings;
     private int numberOfRaters;
-    private boolean isTaken;
+    private String size;
+    private String description;
     private boolean isGate;
 
-    public Parking(long id, double l1, double l2, String add, String time, int cost, int rate, int raters, boolean taken, boolean gate) {
+    public Parking(long id, double l1, double l2, String add, String time, int cost, double rate, int raters, String sz, String desc, boolean gate) {
         userId = id;
         longitude = l1;
         latitude = l2;
@@ -25,7 +26,8 @@ public class Parking {
         costPerHour = cost;
         ratings = rate;
         numberOfRaters = raters;
-        isTaken = taken;
+        size = sz;
+        description = desc;
         isGate = gate;
     }
 
@@ -46,9 +48,12 @@ public class Parking {
     public int getNumberOfRaters() {
         return numberOfRaters;
     }
-    public int getRating() { return ratings; }
-    public boolean getIsTaken() {
-        return isTaken;
+    public double getRating() { return ratings; }
+    public String getSize() {
+        return size;
+    }
+    public String getDescription() {
+        return description;
     }
     public boolean getIsGate() {
         return isGate;

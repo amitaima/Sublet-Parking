@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         // FOR NOW THAT WAY YOU DONT NEED TO LOGOUT AND IN EVERY TIME///////////////////
 //        LoginManager.getInstance().logOut();
-        //////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////
         final MyApplication ap = ((MyApplication)this.getApplication());
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
 
         });
         // For connecting when connected
-
         AccessToken loggedIn = AccessToken.getCurrentAccessToken();
         if (loggedIn!=null)
         {//loggedIn = AccessToken.getCurrentAccessToken() == null;
