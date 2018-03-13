@@ -106,20 +106,21 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:hint="Parking size"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="18sp"
             android:layout_margin="5dp"
-            android:layout_height="wrap_content" />
+            android:layout_weight="1"
+            android:hint="Parking size"
+            android:textSize="18sp" />
 
         <Spinner
             android:id="@+id/parkingSizeSpinner"
             android:layout_width="wrap_content"
-            android:layout_weight="1"
-            android:layout_height="50dp" />
+            android:layout_height="50dp"
+            android:layout_weight="1" />
 
     </LinearLayout>
+
     <Switch
             android:id="@+id/notificationSwitch"
             android:layout_width="match_parent"
