@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -35,7 +36,7 @@ public class MyApplication extends Application {
         @GET("users/{id}")
         Call<User> getUser(@Path("id") int id);
         @GET("parkings/page")
-        Call<List<Parking>> getHomePage();
+        Call<Map<Parking, String>> getHomePage();
         @POST("insertparking/")
         Call<Parking> insertParking(@Body Parking parking);
         @GET("userparking/{id}")
