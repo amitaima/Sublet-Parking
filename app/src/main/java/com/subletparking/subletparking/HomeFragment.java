@@ -2,14 +2,19 @@ package com.subletparking.subletparking;
 
 import android.app.Dialog;
 import android.app.Fragment;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+
 import java.text.DateFormat;
+
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -55,6 +61,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.subletparking.subletparking.R.id.parent;
+
 //retrofit
 
 
@@ -62,7 +70,7 @@ import retrofit2.Response;
  * Created by User on 12/18/2017.
  */
 
-public class HomeFragment extends Fragment implements OnMapReadyCallback{
+public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     GoogleMap mGoogleMap;
     MapView mMapView;
@@ -79,7 +87,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
     TextView addressText, numberOfRatings, priceText, availableTimeText, distanceText, parkingSizeText, gateText, parkingDescriptionText, sumPriceText;
     DatePicker datePicker;
     TimePicker timePicker;
-    String year, month, day, startTime, endTime, date, date2, sentButtonId;
+    String year, month, day, startTime, endTime, date, date2;
+    LatLng myPosition;
     int hour, minute, startHour, startMinute, endHour, endMinute;
     boolean pickedDate = false, pickedStartTime = false, pickedEndTime = false;
 
@@ -90,7 +99,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         placeAutoComplete = (PlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.floating_search_view);
-        final ImageView searchIcon = (ImageView)((LinearLayout)placeAutoComplete.getView()).getChildAt(0);
+        final ImageView searchIcon = (ImageView) ((LinearLayout) placeAutoComplete.getView()).getChildAt(0);
 
         // Set the desired icon
         searchIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_black_24dp));
@@ -127,25 +136,23 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         super.onViewCreated(view, savedInstanceState);
 
         mMapView = (MapView) myView.findViewById(R.id.map);
-        if(mMapView!=null){
+        if (mMapView != null) {
             mMapView.onCreate(null);
             mMapView.onResume();
             mMapView.getMapAsync(this);
         }
     }
 
-    public void getParkings()
-    {
+    public void getParkings() {
         MyApplication ap = (MyApplication) this.getActivity().getApplication();
         Call<List<Parking>> call = ap.getApiService().getHomePage();
         try {
-            call.enqueue(new Callback<List<Parking>>(){
+            call.enqueue(new Callback<List<Parking>>() {
                 @Override
                 public void onResponse(Call<List<Parking>> call, Response<List<Parking>> response) {
                     int statusCode = response.code();
                     List<Parking> parkingPage = response.body();
-                    for (int i=0; i<parkingPage.size();i++)
-                    {
+                    for (int i = 0; i < parkingPage.size(); i++) {
                         LatLng l = new LatLng(parkingPage.get(i).getLongitude(), parkingPage.get(i).getLatitude());
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.location_parking_pin1_green))
@@ -155,6 +162,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
 //needs to be green or red according to some bool from the server for whether it is currently occupied or not, will be added later
                     }
                 }
+
                 @Override
                 public void onFailure(Call<List<Parking>> call, Throwable t) {
                     // Log error here since request failedString[] parkings = parkingsToString(parkingPage);
@@ -162,9 +170,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
                     mySnackbar.show();
                 }
             });
-        } catch(Exception e)
-            {Snackbar mySnackbar = Snackbar.make(getView(), e.getMessage(), Snackbar.LENGTH_LONG);
-            mySnackbar.show();}//try getting the page;*/
+        } catch (Exception e) {
+            Snackbar mySnackbar = Snackbar.make(getView(), e.getMessage(), Snackbar.LENGTH_LONG);
+            mySnackbar.show();
+        }//try getting the page;*/
     }
 
     @Override
@@ -173,6 +182,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         MapsInitializer.initialize(getActivity());
         mGoogleMap = googleMap;
         googleMap.setMapType((GoogleMap.MAP_TYPE_NORMAL));
+        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            googleMap.setMyLocationEnabled(true);
+        } else {
+            // Show rationale and request permission.
+            Toast.makeText(getActivity(), "Turn on location for use of button", Toast.LENGTH_LONG).show();
+        }
+
+        googleMap.setPadding(0, 100, 0, 0);
 
         mGoogleMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
@@ -324,7 +342,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
                 startTime += String.valueOf(startHour) + ":" + "0" + String.valueOf(startMinute) + ":00";//pad with 0s
             else
                 startTime += String.valueOf(startHour) + ":" + String.valueOf(startMinute) + ":00";//pad with 0s
-            startTimeButton.setText(startTime);
+            startTimeButton.setHint(startTime);
         }
         if (pickedEndTime == true)
         {
@@ -334,8 +352,19 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
             else
                 endTime += String.valueOf(endHour) + ":" + String.valueOf(endMinute) + ":00";//pad with 0s
             endTimeButton.setHint(endTime);
+        }
+
+        if(date !=null && startTime != null && endTime != null)
+        {
             int price = 12; // get price of parking here
-            sumPriceText.setText("Price: " + price*(endHour - startHour));
+            if(endHour>startHour) // checking if the time passess a day.
+            {
+                sumPriceText.setText("Price: " + price*(endHour - startHour));
+            }
+            else
+            {
+                sumPriceText.setText("Price: " + price*(endHour+24 - startHour));
+            }
         }
 
         submitButton.setOnClickListener(new View.OnClickListener() {

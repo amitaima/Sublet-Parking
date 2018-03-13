@@ -46,7 +46,7 @@
             android:layout_height="50dp"
             android:layout_gravity="center|left"
             android:layout_margin="5dp"
-            android:text="START TIME" />
+            android:hint="START TIME" />
 
         <View
             android:layout_width="20dp"
