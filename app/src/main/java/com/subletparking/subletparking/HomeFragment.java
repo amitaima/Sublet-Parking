@@ -56,6 +56,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -145,26 +146,28 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     public void getParkings() {
         MyApplication ap = (MyApplication) this.getActivity().getApplication();
-        Call<List<Parking>> call = ap.getApiService().getHomePage();
+        Call<Map<Parking, String>> call = ap.getApiService().getHomePage();
         try {
-            call.enqueue(new Callback<List<Parking>>() {
+            call.enqueue(new Callback<Map<Parking, String>>() {
                 @Override
-                public void onResponse(Call<List<Parking>> call, Response<List<Parking>> response) {
+                public void onResponse(Call<Map<Parking, String>> call, Response<Map<Parking, String>> response) {
                     int statusCode = response.code();
-                    List<Parking> parkingPage = response.body();
+                    Map<Parking, String> parkingPage = response.body();
                     for (int i = 0; i < parkingPage.size(); i++) {
-                        LatLng l = new LatLng(parkingPage.get(i).getLongitude(), parkingPage.get(i).getLatitude());
+                        Parking curr = (Parking) parkingPage.keySet().toArray()[i];
+                        LatLng l = new LatLng(curr.getLongitude(), curr.getLatitude());
+                        int color = parkingPage.get(curr)=="1"?R.drawable.location_parking_pin1_green:
+                                R.drawable.location_parking_pin1_red; //red or green according to bool
                         mGoogleMap.addMarker(new MarkerOptions()
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.location_parking_pin1_green))
-                                .title(parkingPage.get(i).getAddress())
+                                .icon(BitmapDescriptorFactory.fromResource(color))
+                                .title(curr.getAddress())
                                 .position(l))
-                                .setTag(parkingPage.get(i));
-//needs to be green or red according to some bool from the server for whether it is currently occupied or not, will be added later
+                                .setTag(curr);
                     }
                 }
 
                 @Override
-                public void onFailure(Call<List<Parking>> call, Throwable t) {
+                public void onFailure(Call<Map<Parking, String>> call, Throwable t) {
                     // Log error here since request failedString[] parkings = parkingsToString(parkingPage);
                     Snackbar mySnackbar = Snackbar.make(getView(), t.getMessage(), Snackbar.LENGTH_LONG);
                     mySnackbar.show();
@@ -173,7 +176,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         } catch (Exception e) {
             Snackbar mySnackbar = Snackbar.make(getView(), e.getMessage(), Snackbar.LENGTH_LONG);
             mySnackbar.show();
-        }//try getting the page;*/
+        }//try getting the page
     }
 
     @Override
@@ -219,7 +222,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         CameraPosition Liberty = CameraPosition.builder().target(new LatLng(32.824685, 35.234116)).zoom(15).bearing(0).build();
 
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(Liberty));
-        getParkings();
+        try {getParkings();}
+        catch (Exception e)
+        {
+            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     public void myParkingDialog(final Marker marker) {
@@ -379,7 +386,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     {
                         if(response.body().equals("available"))
                             Toast.makeText(getActivity(), "The parking has been successfully oredered!", Toast.LENGTH_LONG).show();
-                        else if (response.body().equals("available"))
+                        else if (response.body().equals("unavailable"))
                             Toast.makeText(getActivity(), "Oh no! Looks like the hours you requested aren't available!", Toast.LENGTH_LONG).show();
                         else Toast.makeText(getActivity(), "Oh no! It seems like a bug as occured, sorry!", Toast.LENGTH_LONG).show();
                     }
