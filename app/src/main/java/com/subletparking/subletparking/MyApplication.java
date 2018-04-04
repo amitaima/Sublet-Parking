@@ -43,6 +43,8 @@ public class MyApplication extends Application {
         Call<String> hasParking(@Path("id") long id);
         @GET("request/{address}/{OPhour}/{ENDhour}")
         Call<String> requestParking(@Path("address") String address, @Path("OPhour") String OPhour, @Path("ENDhour") String ENDhour);
+        @GET("getunsent/{id}")
+        Call<List<Message>> getUnsentMessages(@Path("id") long id);
     }
     public MyApiEndpointInterface apiService = retrofit.create(MyApiEndpointInterface.class);
 
