@@ -6,8 +6,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -69,6 +71,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.subletparking.subletparking.R.id.parent;
+import static com.subletparking.subletparking.R.id.timePicker;
 
 //retrofit
 
@@ -295,6 +298,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 myDialog.cancel(); // Exits existing dialog
+                hour = -1;
+                minute = -1;
+                date = "-1";
                 myOrderDialog();
             }
         });
@@ -321,7 +327,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         submitButton = (Button)myDialog.findViewById(R.id.submitButton);
         close = (Button)myDialog.findViewById(R.id.close);
         sumPriceText = (TextView)myDialog.findViewById(R.id.sumPriceText);
-
+        if (hour != -1 && minute != -1 && date != "-1") submitButton.setEnabled(true);
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -394,11 +400,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 sumPriceText.setText("Price: " + price*(endHour+24 - startHour));
             }
         }
-
         submitButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
                 myDialog.cancel(); // Exits existing dialog
+                timePicker = (TimePicker)myDialog.findViewById(R.id.timePicker);
+                int h = 1;
+
                 MyApplication ap = (MyApplication) getActivity().getApplication();
                 String startDatetime = date+" "+startTime, endDatetime = date2+" "+endTime;
                 ap.getApiService().requestParking(addressText.getText().toString(), startDatetime, endDatetime).enqueue(new Callback<String>() {
