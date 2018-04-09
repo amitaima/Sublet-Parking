@@ -98,7 +98,8 @@
             android:layout_gravity="center|right"
             android:layout_margin="5dp"
             android:text="submit"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:enabled="false" />
 
     </LinearLayout>
 
