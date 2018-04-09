@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -36,6 +38,10 @@ import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.gcm.Task;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
@@ -81,6 +87,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     PlaceAutocompleteFragment placeAutoComplete;
     Dialog myDialog;
     Marker myMarker;
+    FusedLocationProviderClient mFusedLocationClient;
 
     Button close, submitButton, orderButton, startTimeButton, endTimeButton, dateButton;
     RatingBar ratingBar;
@@ -105,7 +112,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         // Set the desired icon
         searchIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_black_24dp));
         // Change the icon to grey //
-        searchIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark), android.graphics.PorterDuff.Mode.SRC_IN);
+        searchIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark), PorterDuff.Mode.SRC_IN);
 
         searchIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +135,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 Log.d("Maps", "An error occurred: " + status);
             }
         });
-
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this.getActivity());
         return myView;
     }
 
@@ -151,12 +158,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             call.enqueue(new Callback<Map<Parking, String>>() {
                 @Override
                 public void onResponse(Call<Map<Parking, String>> call, Response<Map<Parking, String>> response) {
-                    int statusCode = response.code();
                     Map<Parking, String> parkingPage = response.body();
                     for (int i = 0; i < parkingPage.size(); i++) {
                         Parking curr = (Parking) parkingPage.keySet().toArray()[i];
                         LatLng l = new LatLng(curr.getLongitude(), curr.getLatitude());
-                        int color = parkingPage.get(curr)=="1"?R.drawable.location_parking_pin1_green:
+                        int color = parkingPage.get(curr) == "1" ? R.drawable.location_parking_pin1_green :
                                 R.drawable.location_parking_pin1_red; //red or green according to bool
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .icon(BitmapDescriptorFactory.fromResource(color))
@@ -222,9 +228,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         CameraPosition Liberty = CameraPosition.builder().target(new LatLng(32.824685, 35.234116)).zoom(15).bearing(0).build();
 
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(Liberty));
-        try {getParkings();}
-        catch (Exception e)
-        {
+        try {
+            getParkings();
+        } catch (Exception e) {
             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
@@ -236,20 +242,30 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         myDialog.setTitle("Parking Dialog");
         myDialog.show();
 
-        orderButton = (Button)myDialog.findViewById(R.id.orderButton);
-        close = (Button)myDialog.findViewById(R.id.close);
-        ratingBar = (RatingBar)myDialog.findViewById(R.id.MyRating);
+        orderButton = (Button) myDialog.findViewById(R.id.orderButton);
+        close = (Button) myDialog.findViewById(R.id.close);
+        ratingBar = (RatingBar) myDialog.findViewById(R.id.MyRating);
         parkingImage = (ImageView) myDialog.findViewById(R.id.parkingImage);
-        addressText = (TextView)myDialog.findViewById(R.id.addressText);
-        numberOfRatings = (TextView)myDialog.findViewById(R.id.numberOfRatings);
-        priceText = (TextView)myDialog.findViewById(R.id.priceText);
-        availableTimeText = (TextView)myDialog.findViewById(R.id.availableTimeText);
-        distanceText = (TextView)myDialog.findViewById(R.id.distanceText);
-        parkingSizeText = (TextView)myDialog.findViewById(R.id.parkingSizeText);
-        gateText = (TextView)myDialog.findViewById(R.id.gateText);
-        parkingDescriptionText = (TextView)myDialog.findViewById(R.id.parkingDescriptionText);
-        final Parking current = (Parking)marker.getTag();
+        addressText = (TextView) myDialog.findViewById(R.id.addressText);
+        numberOfRatings = (TextView) myDialog.findViewById(R.id.numberOfRatings);
+        priceText = (TextView) myDialog.findViewById(R.id.priceText);
+        availableTimeText = (TextView) myDialog.findViewById(R.id.availableTimeText);
+        distanceText = (TextView) myDialog.findViewById(R.id.distanceText);
+        parkingSizeText = (TextView) myDialog.findViewById(R.id.parkingSizeText);
+        gateText = (TextView) myDialog.findViewById(R.id.gateText);
+        parkingDescriptionText = (TextView) myDialog.findViewById(R.id.parkingDescriptionText);
+        final Parking current = (Parking) marker.getTag();
         addressText.setText(marker.getTitle());
+
+        if (ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;} //permission check
+
+        com.google.android.gms.tasks.Task<Location> t = mFusedLocationClient.getLastLocation();
+        while (t.isSuccessful()!=true){} //wait for success (async anyway)
+        Location loc1 = t.getResult();
+        LatLng loc2 = marker.getPosition();
+        float[] results = new float[1];
+        if (loc1 != null) Location.distanceBetween(loc1.getLatitude(), loc1.getLongitude(), loc2.latitude, loc2.longitude, results);
 
         double rating = current.getRating();
         ratingBar.setRating((float)rating);
@@ -259,7 +275,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         priceText.setText(price);
         String time = "Unoccupied on: " + current.getHours();
         availableTimeText.setText(time);
-        String distance = "200" + " meters" + " from destination"; //curretly redundant
+
+        String dis = "";
+        if (results[0] > 1000.0) dis = String.valueOf((Math.round(results[0]/100))/10.0) + " Km";
+        else dis = String.valueOf((Math.round(results[0]))/1.0) + " meters";
+        String distance = String.valueOf(dis) + " from destination"; //curretly redundant
+        if (loc1 == null) distance = "Location disabled"; //can't know distance
         distanceText.setText(distance);
         String size = current.getSize() + " parking";
         parkingSizeText.setText(size);
