@@ -60,7 +60,6 @@
             android:value="AIzaSyBE24kO8yLjBGfhJ0lmhx7SanrzsTurD7Y"/>
             <!--android:value="AIzaSyBJWnXKj8Zb2YwGAYgMuVxNWHkse5vAgFw"/>   Hallel Segel   -->
         <!--android:value="AIzaSyBE24kO8yLjBGfhJ0lmhx7SanrzsTurD7Y"/>   Amitai Malka   -->
-        <!--Maps-->
 
         <uses-feature
             android:glEsVersion="0x00020000"
