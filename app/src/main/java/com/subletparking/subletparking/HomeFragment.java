@@ -305,7 +305,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 date = "-1";
                 endHour = -1;
                 endMinute = -1;
-                myOrderDialog();
+                myOrderDialog(current.getCostPerHour());
             }
         });
 
@@ -397,7 +397,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
 
         if (date != null && startTime != null && endTime != null) {
-            int price = 12; // get price of parking here
             if (endHour > startHour) // checking if the time passess a day.
             {
                 sumPriceText.setText("Price: " + price * (endHour - startHour));
@@ -406,6 +405,23 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             }
         }
 
+        if (pickedDate && pickedEndTime && pickedStartTime) //if all values are assigned
+        {
+            if (startHour >= strtTime && endHour <= ndTime) //if the hours are not in the parking's range
+                submitButton.setEnabled(true);
+            else
+                validityError.setText("Parking is occupied in these hours, the hours are: " + avlblHours);
+        }
+        else
+        {
+            validityError.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    validityError.setText("At least one of the fields is empty");
+                }
+            }, 3000);
+        }
+        validityError.setEnabled(false);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
@@ -466,23 +482,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
             }
         });
-        if (pickedDate && pickedEndTime && pickedStartTime) //if all values are assigned
-        {
-            if (startHour >= strtTime && endHour <= ndTime) //if the hours are not in the parking's range
-                submitButton.setEnabled(true);
-            else
-                validityError.setText("Parking is occupied in these hours, the hours are: " + avlblHours);
-        }
-        else
-        {
-            validityError.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    validityError.setText("At least one of the fields is empty");
-                }
-            }, 3000);
-        }
-        validityError.setEnabled(false);
     }
 
 
