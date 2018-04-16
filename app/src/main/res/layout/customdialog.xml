@@ -20,14 +20,12 @@
 
     </FrameLayout>
 
-    <EditText
-        android:id="@+id/insertAddress"
-        android:layout_width="300dp"
-        android:layout_margin="10dp"
-        android:layout_height="50dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="address" />
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/floating_search_view"
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"/>
+
 
     <LinearLayout
         android:id="@+id/timeLayout"

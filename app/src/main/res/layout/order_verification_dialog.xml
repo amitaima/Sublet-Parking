@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/orderDescriptionText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="15sp"
+        android:textAlignment="center"
+        android:text="TextView" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancel"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center|left"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:text="cancel"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/submitButton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center|right"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:text="order"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
