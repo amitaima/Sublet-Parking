@@ -192,7 +192,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             // Show rationale and request permission.
             Toast.makeText(getActivity(), "Turn on location for use of button", Toast.LENGTH_LONG).show();
         }
-
         googleMap.setPadding(0, 100, 0, 0);
 
         mGoogleMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
@@ -255,7 +254,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         ratingBar.setRating((float)rating);
         String raters = "(" + Integer.toString(current.getNumberOfRaters()) + ")";
         numberOfRatings.setText(raters);
-        String price = Integer.toString(current.getCostPerHour()) + "₪\nper hour";
+        final String price = Integer.toString(current.getCostPerHour()) + "₪\nper hour";
         priceText.setText(price);
         String time = "Unoccupied on: " + current.getHours();
         availableTimeText.setText(time);
@@ -274,7 +273,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 myDialog.cancel(); // Exits existing dialog
-                myOrderDialog();
+                myOrderDialog(current.getCostPerHour());
             }
         });
 
@@ -287,7 +286,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
-    public void myOrderDialog () {
+    public void myOrderDialog (final int price) {
         myDialog = new Dialog(getActivity());
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         myDialog.setContentView(R.layout.order_dialog);
@@ -305,7 +304,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 myDialog.cancel(); // Exits existing dialog
-                dateDialog();
+                dateDialog(price);
             }
         });
 
@@ -313,7 +312,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 myDialog.cancel(); // Exits existing dialog
-                timeDialog(1);
+                timeDialog(1, price);
             }
         });
 
@@ -321,7 +320,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 myDialog.cancel(); // Exits existing dialog
-                timeDialog(2);
+                timeDialog(2, price);
             }
         });
 
@@ -363,7 +362,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         if(date !=null && startTime != null && endTime != null)
         {
-            int price = 12; // get price of parking here
             if(endHour>startHour) // checking if the time passess a day.
             {
                 sumPriceText.setText("Price: " + price*(endHour - startHour));
@@ -373,6 +371,36 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 sumPriceText.setText("Price: " + price*(endHour+24 - startHour));
             }
         }
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.cancel(); // Exits existing dialog
+                orderVerificationDialog(date,date2,startTime,endTime,price);
+            }
+        });
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.cancel(); // Exits existing dialog
+            }
+        });
+
+    }
+
+    public void orderVerificationDialog(final String date, final String date2, final String startTime, final String endTime, final int price) {
+        myDialog = new Dialog(getActivity());
+        myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        myDialog.setContentView(R.layout.order_verification_dialog);
+        myDialog.setTitle("Order Verification Dialog");
+        myDialog.show();
+
+        submitButton = (Button)myDialog.findViewById(R.id.submitButton);
+        close = (Button)myDialog.findViewById(R.id.cancel);
+        TextView text = (TextView) myDialog.findViewById(R.id.orderDescriptionText);
+
+        text.setText("ordered parking:\n\nAddress: " + addressText.getText().toString() + "\nStart time: " + date + " , " + startTime + "\nEnd time: " + date2 + " , " + endTime + "\nPrice: " + price + "\n\nAre you sure you want to order?");
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -388,12 +416,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                             Toast.makeText(getActivity(), "The parking has been successfully oredered!", Toast.LENGTH_LONG).show();
                         else if (response.body().equals("unavailable"))
                             Toast.makeText(getActivity(), "Oh no! Looks like the hours you requested aren't available!", Toast.LENGTH_LONG).show();
-                        else Toast.makeText(getActivity(), "Oh no! It seems like a bug as occured, sorry!", Toast.LENGTH_LONG).show();
+                        else Toast.makeText(getActivity(), "Oh no! It seems like a bug has occured, sorry!", Toast.LENGTH_LONG).show();
                     }
                     @Override
                     public void onFailure(retrofit2.Call<String> call, Throwable t) {}
                 });
-                //Toast.makeText(getActivity(), "Order has been submitted\n" + date + "\n" + startTime + " - " + endTime + "\n" + sumPriceText.getText(), Toast.LENGTH_LONG).show(); // Makes a small message.
             }
         });
 
@@ -401,12 +428,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 myDialog.cancel(); // Exits existing dialog
+
             }
         });
 
     }
 
-    public void timeDialog(final int id) {
+
+    public void timeDialog(final int id, final int price) {
         myDialog = new Dialog(getActivity());
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         myDialog.setContentView(R.layout.time_dialog);
@@ -435,7 +464,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     endHour = hour;
                     endMinute = minute;
                 }
-                myOrderDialog(); // with changes
+                myOrderDialog(price); // with changes
             }
         });
 
@@ -451,14 +480,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 {
                     pickedEndTime = false;
                 }
-                myOrderDialog(); // without changes
+                myOrderDialog(price); // without changes
             }
         });
 
 
     }
 
-    public void dateDialog() {
+    public void dateDialog(final int price) {
         myDialog = new Dialog(getActivity());
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         myDialog.setContentView(R.layout.date_dialog);
@@ -485,7 +514,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 if (datePicker.getDayOfMonth()<10) day = "0"; else day = ""; //pad with 0
                 day += String.valueOf(datePicker.getDayOfMonth());
                 pickedDate=true;
-                myOrderDialog(); // with changes
+                myOrderDialog(price); // with changes
             }
         });
 
@@ -494,7 +523,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View v) {
                 myDialog.cancel(); // Exits existing dialog
                 pickedDate=false;
-                myOrderDialog(); // without changes
+                myOrderDialog(price); // without changes
             }
         });
     }

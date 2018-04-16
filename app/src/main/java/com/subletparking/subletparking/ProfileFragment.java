@@ -1,5 +1,6 @@
 package com.subletparking.subletparking;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.telecom.Call;
 import android.text.InputType;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -30,8 +32,26 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.arlib.floatingsearchview.FloatingSearchView;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.R.attr.data;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by User on 12/18/2017.
@@ -45,7 +65,8 @@ public class ProfileFragment extends Fragment {
     Dialog myDialog;
     Button submitButton,close;
     ImageButton addTimeButton, menuButton;
-    EditText insertAddress, insertTimeStart, insertTimeEnd, insertPrice, insertDescription;
+    EditText insertTimeStart, insertTimeEnd, insertPrice, insertDescription;
+    PlaceAutocompleteFragment insertAddressPlace;
     String address, timeStart, timeEnd, size, description;
     DrawerLayout mDrawerLayout;
     ListView mDrawerList;
@@ -88,7 +109,7 @@ public class ProfileFragment extends Fragment {
         submitButton = (Button)myDialog.findViewById(R.id.submitButton);
         close = (Button)myDialog.findViewById(R.id.close);
         addTimeButton = (ImageButton)myDialog.findViewById(R.id.addTimeButton);
-        insertAddress = (EditText) myDialog.findViewById(R.id.insertAddress);
+        insertAddressPlace = (PlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.floating_search_view);
         insertTimeStart = (EditText)myDialog.findViewById(R.id.insertTimeStart);
         insertTimeEnd = (EditText)myDialog.findViewById(R.id.insertTimeEnd);
         insertPrice = (EditText)myDialog.findViewById(R.id.insertPrice);
@@ -122,9 +143,35 @@ public class ProfileFragment extends Fragment {
                 // write here the function to add the Parking to server.
                 try {
                     long id = ap.getUserId();
+                    int PLACE_PICKER_REQUEST=1;
 
                     //get all of the info from the layout
-                    address = insertAddress.getText().toString();
+
+                    PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                    Intent intent;
+                    try {
+                        intent = builder.build((Activity) getActivity().getApplicationContext());
+                        startActivityForResult(intent, PLACE_PICKER_REQUEST);
+                    } catch (GooglePlayServicesRepairableException e) {
+                        e.printStackTrace();
+                    } catch (GooglePlayServicesNotAvailableException e) {
+                        e.printStackTrace();
+                    }
+
+                    /*public void onActivityResult(int requestCode, int resultCode, Intent intentData)
+                    {
+                        if(requestCode==PLACE_PICKER_REQUEST)
+                        {
+                            if(resultCode==RESULT_OK)
+                            {
+                                Place place= PlacePicker.getPlace(intentData, this);
+                                String address = String.format("Place: %s",place.getAddress());
+                            }
+                        }
+
+                    }*/
+
+
                     timeStart = insertTimeStart.getText().toString();
                     timeEnd = insertTimeEnd.getText().toString();
                     price = Integer.parseInt(insertPrice.getText().toString());
