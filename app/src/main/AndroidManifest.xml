@@ -57,7 +57,7 @@
         <!--Maps Android Key-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBJWnXKj8Zb2YwGAYgMuVxNWHkse5vAgFw"/>
+            android:value="AIzaSyBE24kO8yLjBGfhJ0lmhx7SanrzsTurD7Y"/>
             <!--android:value="AIzaSyBJWnXKj8Zb2YwGAYgMuVxNWHkse5vAgFw"/>   Hallel Segel   -->
         <!--android:value="AIzaSyBE24kO8yLjBGfhJ0lmhx7SanrzsTurD7Y"/>   Amitai Malka   -->
 
