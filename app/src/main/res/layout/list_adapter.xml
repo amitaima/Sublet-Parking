@@ -12,7 +12,7 @@
     android:layout_alignParentTop="true"
     android:layout_marginRight="6dip"
     android:contentDescription="TODO"
-    android:src="@mipmap/ic_mini_logo" />
+    android:src="@mipmap/ic_logo" />
 
 <TextView
     android:id="@+id/secondLine"

@@ -1,5 +1,9 @@
 package com.subletparking.subletparking;
 
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.TimeUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -16,11 +20,19 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.squareup.okhttp.internal.Util;
+import com.squareup.okhttp.internal.http.HttpMethod;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Timer;
 
@@ -83,8 +95,33 @@ public class MainActivity extends AppCompatActivity {
         window.setStatusBarColor(ContextCompat.getColor(this,R.color.colorAccent));
     }
 
+    public Bitmap getFacebookProfilePicture(String userID){
+        URL imageURL = null;
+        try {
+            imageURL = new URL("https://graph.facebook.com/" + userID + "/picture?type=large");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        Bitmap bitmap = null;
+        try {
+            bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return bitmap;
+    }
+
     public void fbLoginSuccessfull(String userId) {
-        Toast.makeText(this , "Welcome" + userId, Toast.LENGTH_LONG).show(); // Makes a small message.
+        String firstName = "https://graph.facebook.com/" + userId + "/first_name"; //Gets users first name.
+        String lastName = "https://graph.facebook.com/" + userId + "/last_name"; //Gets users last name.
+        String name = "https://graph.facebook.com/" + userId + "/name?fields=first_name.limit(1)"; //Gets users name.
+        //Bitmap bitmap = getFacebookProfilePicture(userId); //Gets profile picture of facebook user.
+        /*
+            Should add here the first name, last name and the picture to the data base.
+        */
+        Profile.getCurrentProfile();
+        Toast.makeText(this , "Welcome" + firstName + name, Toast.LENGTH_LONG).show(); // Makes a small message.
         Intent intent = new Intent(this, ParkingSpotListActivity.class);
         finish();
         startActivity(intent);
