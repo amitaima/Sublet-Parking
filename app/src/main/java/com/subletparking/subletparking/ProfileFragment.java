@@ -6,6 +6,8 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -36,6 +38,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
+import com.codemybrainsout.placesearch.PlaceSearchDialog;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.ResultCallback;
@@ -43,12 +46,16 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -64,7 +71,7 @@ public class ProfileFragment extends Fragment {
 
     MyApplication ap;
     View myView;
-    Button openDialog;
+    Button openDialog, pickAddressButton;
     Dialog myDialog;
     Button submitButton,close;
     ImageButton addTimeButton, menuButton;
@@ -74,6 +81,7 @@ public class ProfileFragment extends Fragment {
     DrawerLayout mDrawerLayout;
     ListView mDrawerList;
     int price;
+    double placeLat=0, placeLon=0;
     public int numberOfLines = 1;
 
     @Nullable
@@ -103,6 +111,29 @@ public class ProfileFragment extends Fragment {
         return myView;
     }
 
+    public void addressDialog()
+    {
+        PlaceSearchDialog placeSearchDialog = new PlaceSearchDialog.Builder(getActivity())
+                .setLocationNameListener(new PlaceSearchDialog.LocationNameListener() {
+                    @Override
+                    public void locationName(String locationName) {
+                        //set textview or edittext
+                        Geocoder coder = new Geocoder(getActivity());
+                        try {
+                            ArrayList<Address> adresses = (ArrayList<Address>) coder.getFromLocationName(locationName, 50);
+                            for(Address add : adresses){
+                                placeLon = add.getLongitude();
+                                placeLat = add.getLatitude();
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .build();
+        placeSearchDialog.show();
+    }
+
     public void myAlertDialog(){
         myDialog = new Dialog(getActivity());
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -111,8 +142,9 @@ public class ProfileFragment extends Fragment {
 
         submitButton = (Button)myDialog.findViewById(R.id.submitButton);
         close = (Button)myDialog.findViewById(R.id.close);
+        pickAddressButton = (Button) myDialog.findViewById(R.id.pickAddressButton);
         addTimeButton = (ImageButton)myDialog.findViewById(R.id.addTimeButton);
-        insertAddressPlace = (PlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.floating_search_view);
+        //insertAddressPlace = (PlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.floating_search_view);
         insertTimeStart = (EditText)myDialog.findViewById(R.id.insertTimeStart);
         insertTimeEnd = (EditText)myDialog.findViewById(R.id.insertTimeEnd);
         insertPrice = (EditText)myDialog.findViewById(R.id.insertPrice);
@@ -133,6 +165,25 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+        /*insertAddressPlace.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                placeLat = place.getLatLng().latitude;
+                placeLon = place.getLatLng().longitude;
+            }
+
+            @Override
+            public void onError(Status status) {
+
+            }
+        });*/
+
+        pickAddressButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                addressDialog();
+            }
+        });
 
         submitButton.setEnabled(true);
         close.setEnabled(true);
@@ -150,7 +201,7 @@ public class ProfileFragment extends Fragment {
 
                     //get all of the info from the layout
 
-                    PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                    /*PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                     Intent intent;
                     try {
                         intent = builder.build((Activity) getActivity().getApplicationContext());
@@ -159,7 +210,7 @@ public class ProfileFragment extends Fragment {
                         e.printStackTrace();
                     } catch (GooglePlayServicesNotAvailableException e) {
                         e.printStackTrace();
-                    }
+                    }*/
 
                     /*public void onActivityResult(int requestCode, int resultCode, Intent intentData)
                     {
@@ -181,7 +232,7 @@ public class ProfileFragment extends Fragment {
                     description = insertDescription.getText().toString();//CRASHES
                     /////////////////////////////////////
 
-                    Parking parking = new Parking(id, 33.33, 33.33, address, timeStart + " to " + timeEnd, price, 0, 0, size, description, false);
+                    Parking parking = new Parking(id, placeLat, placeLon, address, timeStart + " to " + timeEnd, price, 0, 0, size, description, false);
                     //demo parking; still needs: picker from a map to get both address and lat/lon,
                     sendParking(parking);
                     //get the application (MyApplication) from the activity; then get the id from the application (MyApplication)

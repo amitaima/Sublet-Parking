@@ -54,6 +54,13 @@
             </intent-filter>
         </activity>
 
+        <dependency>
+            <groupId>com.codemybrainsout.placesearchdialog</groupId>
+            <artifactId>placesearch</artifactId>
+            <version>1.0.0</version>
+            <type>pom</type>
+        </dependency>
+
         <!--Maps Android Key-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
