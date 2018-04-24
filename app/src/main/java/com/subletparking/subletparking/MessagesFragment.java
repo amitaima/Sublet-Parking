@@ -28,6 +28,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 /**
  * Created by User on 12/18/2017.
  */
@@ -54,11 +56,17 @@ public class MessagesFragment extends Fragment {
                 @Override
                 public void onResponse(Call<List<Message> > call, Response<List<Message> > response) {
                     List<Message>  messagesList = response.body();
+                    ArrayList<String> arrayList = new ArrayList<String>();
+                    ArrayAdapter<String> adapter;
+                    adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, arrayList);
+                    myListView.setAdapter(adapter);
+                    messagesList.add(new Message((long) getId(),"bla","moreshet Levona 294", "2018-03-09 10:00:00" , "2018-03-09 12:00:00"));
                     for (int i = 0; i < messagesList.size(); i++)
                     {
                         Date startHour = messagesList.get(i).getOPhour();
                         Date endHour = messagesList.get(i).getENDhour();
                         String address = messagesList.get(i).getAddress();
+                        adapter.add("Your parking at the address: " + address + " was ordered for certain hours");
                         //those should be used. Maybe I'll somehow make it so you know who ordered it.
                     }
                 }

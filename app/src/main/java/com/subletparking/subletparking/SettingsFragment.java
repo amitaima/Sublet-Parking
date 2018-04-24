@@ -2,9 +2,14 @@ package com.subletparking.subletparking;
 
 import android.app.Dialog;
 import android.app.Fragment;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,6 +23,10 @@ import android.widget.Switch;
 
 import com.facebook.login.LoginManager;
 
+import static android.app.Notification.VISIBILITY_PUBLIC;
+import static android.app.NotificationManager.IMPORTANCE_DEFAULT;
+import static android.app.NotificationManager.IMPORTANCE_HIGH;
+
 /**
  * Created by User on 12/18/2017.
  */
@@ -27,7 +36,7 @@ public class SettingsFragment extends Fragment {
     View myView;
     ImageButton menuButton;
     DrawerLayout mDrawerLayout;
-    Button colorThemeButton, fontSizeButton, logOutButton;
+    Button colorThemeButton, fontSizeButton, logOutButton, notificationTestButton;
     Switch notificationSwitch;
     Dialog myDialog;
 
@@ -42,12 +51,41 @@ public class SettingsFragment extends Fragment {
         fontSizeButton = (Button) myView.findViewById(R.id.fontSizeButton);
         logOutButton = (Button) myView.findViewById(R.id.logOutButton);
         notificationSwitch = (Switch) myView.findViewById(R.id.notificationSwitch);
+        notificationTestButton = (Button) myView.findViewById(R.id.notificationTestButton);
         boolean switchState = notificationSwitch.isChecked();
 
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDrawerLayout.openDrawer(Gravity.LEFT);
+
+            }
+        });
+
+        notificationSwitch.setChecked(true);
+
+        notificationTestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an explicit intent for an Activity in your app
+                Intent intent = new Intent(myView.getContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                PendingIntent pendingIntent = PendingIntent.getActivity(myView.getContext(), 0, intent, 0);
+                NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(myView.getContext())
+                        .setSmallIcon(R.drawable.ic_test)
+                        .setContentTitle("test notification title")
+                        .setContentText("this is a test notification text")
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("this is the expanded text of the test notification text. Press to enter the settings"))
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setVisibility(VISIBILITY_PUBLIC)
+                        .setContentIntent(pendingIntent)
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setPriority(IMPORTANCE_HIGH)
+                        .setColor(getResources().getColor(R.color.colorAccent))
+                        .setAutoCancel(true);
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(myView.getContext());
+                notificationManager.notify(0,notificationBuilder.build());
 
             }
         });

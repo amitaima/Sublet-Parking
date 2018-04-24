@@ -3,14 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:maxHeight="200dp"
-        android:scaleType="fitCenter"
-        app:srcCompat="@color/colorAccent" />
 
     <ImageView
         android:id="@+id/imageView4"
@@ -39,6 +31,8 @@
         android:layout_above="@+id/textView3"
         android:tint="@color/colorPrimaryDark"
         android:layout_centerHorizontal="true" />
+
+
 
     <!--<com.dd.ShadowLayout
         android:layout_width="wrap_content"
@@ -74,5 +68,13 @@
         android:layout_marginRight="5dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/hasParkingAns"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="" />
 
 </RelativeLayout>
