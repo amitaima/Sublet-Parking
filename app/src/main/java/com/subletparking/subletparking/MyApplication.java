@@ -35,8 +35,8 @@ public class MyApplication extends Application {
         // Callback for the parsed response is the last parameter
         @GET("users/{id}")
         Call<User> getUser(@Path("id") int id);
-        @GET("parkings/page")
-        Call<Map<Parking, String>> getHomePage();
+        @GET("parkings/page/<cntrLat>/<cntrLon>/<zoom>")
+        Call<Map<Parking, String>> getHomePage(@Path("cntrLat") double lat, @Path("cntrLon") double lon, @Path("zoom") double zoom);
         @POST("insertparking/")
         Call<Parking> insertParking(@Body Parking parking);
         @GET("userparking/{id}")
