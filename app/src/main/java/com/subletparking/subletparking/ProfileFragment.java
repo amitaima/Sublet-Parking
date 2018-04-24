@@ -184,9 +184,7 @@ public class ProfileFragment extends Fragment {
                     /////////////////////////////////////
 
                     Parking parking = new Parking(id, placeLat, placeLon, address, timeStart + " to " + timeEnd, price, 0, 0, size, description, false);
-                    //demo parking; still needs: picker from a map to get both address and lat/lon,
                     sendParking(parking);
-                    //get the application (MyApplication) from the activity; then get the id from the application (MyApplication)
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
