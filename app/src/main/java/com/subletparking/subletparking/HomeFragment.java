@@ -103,6 +103,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     TimePicker timePicker;
     String year, month, day, startTime, endTime, date, date2;
     LatLng myPosition;
+    float myZoom;
     int hour, minute, startHour, startMinute, endHour, endMinute;
     boolean pickedDate = false, pickedStartTime = false, pickedEndTime = false;
     Parking current = null;
@@ -126,7 +127,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 mDrawerLayout.openDrawer(Gravity.START);
             }
         });
-
+        //move to a place chosen in the search bar
         placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
@@ -159,7 +160,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     public void getParkings() {
         MyApplication ap = (MyApplication) this.getActivity().getApplication();
-        Call<Map<Parking, String>> call = ap.getApiService().getHomePage();
+        Call<Map<Parking, String>> call = ap.getApiService().getHomePage(myPosition.latitude, myPosition.longitude, myZoom);
         try {
             call.enqueue(new Callback<Map<Parking, String>>() {
                 @Override
@@ -210,6 +211,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onCameraIdle() {
                 CameraPosition curr = mGoogleMap.getCameraPosition();
+                myPosition = curr.target;
+                myZoom = curr.zoom;
             }
         });
 
