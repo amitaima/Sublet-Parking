@@ -74,6 +74,7 @@ public class ProfileFragment extends Fragment {
     DrawerLayout mDrawerLayout;
     ListView mDrawerList;
     int price;
+    double placeLat=0, placeLon=0;
     public int numberOfLines = 1;
 
     @Nullable
@@ -84,7 +85,6 @@ public class ProfileFragment extends Fragment {
         openDialog = (Button) myView.findViewById(R.id.addParkingButton);
         menuButton = (ImageButton) myView.findViewById(R.id.menuButton1);
         mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
-
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,10 +109,10 @@ public class ProfileFragment extends Fragment {
         myDialog.setContentView(R.layout.customdialog);
         myDialog.setTitle("Add Parking Dialog");
 
+        insertAddressPlace = (PlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.floating_search_view);
         submitButton = (Button)myDialog.findViewById(R.id.submitButton);
         close = (Button)myDialog.findViewById(R.id.close);
         addTimeButton = (ImageButton)myDialog.findViewById(R.id.addTimeButton);
-        insertAddressPlace = (PlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.floating_search_view);
         insertTimeStart = (EditText)myDialog.findViewById(R.id.insertTimeStart);
         insertTimeEnd = (EditText)myDialog.findViewById(R.id.insertTimeEnd);
         insertPrice = (EditText)myDialog.findViewById(R.id.insertPrice);
@@ -133,7 +133,18 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+        insertAddressPlace.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                placeLat = place.getLatLng().latitude;
+                placeLon = place.getLatLng().longitude;
+            }
 
+            @Override
+            public void onError(Status status) {
+
+            }
+        });
         submitButton.setEnabled(true);
         close.setEnabled(true);
         addTimeButton.setEnabled(true);
@@ -142,14 +153,11 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "Parking has been submited", Toast.LENGTH_LONG).show(); // Makes a small message.
-
                 // write here the function to add the Parking to server.
                 try {
                     long id = ap.getUserId();
                     int PLACE_PICKER_REQUEST=1;
-
                     //get all of the info from the layout
-
                     PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                     Intent intent;
                     try {
@@ -160,7 +168,6 @@ public class ProfileFragment extends Fragment {
                     } catch (GooglePlayServicesNotAvailableException e) {
                         e.printStackTrace();
                     }
-
                     /*public void onActivityResult(int requestCode, int resultCode, Intent intentData)
                     {
                         if(requestCode==PLACE_PICKER_REQUEST)
@@ -169,22 +176,15 @@ public class ProfileFragment extends Fragment {
                             {
                                 Place place= PlacePicker.getPlace(intentData, this);
                                 String address = String.format("Place: %s",place.getAddress());
-                            }
-                        }
-
-                    }*/
-
-
+                            }}}*/
                     timeStart = insertTimeStart.getText().toString();
                     timeEnd = insertTimeEnd.getText().toString();
                     price = Integer.parseInt(insertPrice.getText().toString());
                     description = insertDescription.getText().toString();//CRASHES
                     /////////////////////////////////////
 
-                    Parking parking = new Parking(id, 33.33, 33.33, address, timeStart + " to " + timeEnd, price, 0, 0, size, description, false);
-                    //demo parking; still needs: picker from a map to get both address and lat/lon,
+                    Parking parking = new Parking(id, placeLat, placeLon, address, timeStart + " to " + timeEnd, price, 0, 0, size, description, false);
                     sendParking(parking);
-                    //get the application (MyApplication) from the activity; then get the id from the application (MyApplication)
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
