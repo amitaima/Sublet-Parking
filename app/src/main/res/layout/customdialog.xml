@@ -20,11 +20,21 @@
 
     </FrameLayout>
 
-    <fragment
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/pickAddressButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:textSize="17sp"
+        android:layout_marginBottom="5dp"
+        android:hint="pick address" />
+
+    <!--<fragment
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/floating_search_view"
-        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"/>
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"/>-->
 
 
     <LinearLayout
