@@ -123,6 +123,7 @@ public class ProfileFragment extends Fragment {
                             for(Address add : adresses){
                                 placeLon = add.getLongitude();
                                 placeLat = add.getLatitude();
+                                address = locationName;
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -185,8 +186,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-            }
-        });
         submitButton.setEnabled(true);
         close.setEnabled(true);
         addTimeButton.setEnabled(true);
