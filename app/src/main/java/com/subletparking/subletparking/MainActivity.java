@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
                 long id = Long.parseLong(loginResult.getAccessToken().getUserId());
                 ap.setUserId(id);
+                ap.setUserToken(loginResult.getAccessToken());
                 fbLoginSuccessfull(String.valueOf(id));
             }
 
@@ -87,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         {//loggedIn = AccessToken.getCurrentAccessToken() == null;
             String id = loggedIn.getUserId();
             ap.setUserId(Long.parseLong(id));
+            ap.setUserToken(loggedIn);
             fbLoginSuccessfull(id);
         }
         ////////Set status bar color///////////

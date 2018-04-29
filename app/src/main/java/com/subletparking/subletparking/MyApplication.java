@@ -2,6 +2,8 @@ package com.subletparking.subletparking;
 
 import android.app.Application;
 
+import com.facebook.AccessToken;
+import com.google.android.gms.internal.pu;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -22,6 +24,8 @@ import retrofit2.http.Path;
 
 public class MyApplication extends Application {
     private long userId;
+    private String userName;
+    private AccessToken userToken;
     public static final String BASE_URL = "http:/192.168.14.33:5000/"; //server url
     Gson gson = new GsonBuilder()
             .setLenient() //this relaxes the gson a lot, letting it parse malformed JSON as well
@@ -58,4 +62,8 @@ public class MyApplication extends Application {
     public void setUserId(long id) {
         userId = id;
     }
+    public String getUserName() {return userName;}
+    public void setUserName(String name) {userName = name;}
+    public AccessToken getUserToken(){return userToken;}
+    public void setUserToken(AccessToken at) {userToken = at;}
 }
