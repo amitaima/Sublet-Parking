@@ -124,6 +124,7 @@ public class ProfileFragment extends Fragment {
                                 placeLon = add.getLongitude();
                                 placeLat = add.getLatitude();
                                 address = locationName;
+                                pickAddressButton.setText(address);
                             }
                         } catch (IOException e) {
                             e.printStackTrace();

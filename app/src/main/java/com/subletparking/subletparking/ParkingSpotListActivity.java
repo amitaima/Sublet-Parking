@@ -22,6 +22,7 @@ import android.app.Fragment;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.facebook.login.LoginManager;
 
