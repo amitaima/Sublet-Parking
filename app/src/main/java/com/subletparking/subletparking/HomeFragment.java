@@ -103,7 +103,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     TimePicker timePicker;
     String year, month, day, startTime, endTime, date, date2;
     LatLng myPosition;
-    float myZoom;
+    double myZoom;
     int hour, minute, startHour, startMinute, endHour, endMinute;
     boolean pickedDate = false, pickedStartTime = false, pickedEndTime = false;
     Parking current = null;
@@ -159,9 +159,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public void getParkings() {
+        Call<Map<Parking, String>> call = null;
         MyApplication ap = (MyApplication) this.getActivity().getApplication();
-        Call<Map<Parking, String>> call = ap.getApiService().getHomePage(myPosition.latitude, myPosition.longitude, myZoom);
-        try {
+    try{    call = ap.getApiService().getHomePage(myPosition.latitude, myPosition.longitude, myZoom);
+    } catch (Exception e) {
+        Snackbar mySnackbar = Snackbar.make(getView(), e.getMessage(), Snackbar.LENGTH_LONG);
+        mySnackbar.show();
+    }
+    try {
             call.enqueue(new Callback<Map<Parking, String>>() {
                 @Override
                 public void onResponse(Call<Map<Parking, String>> call, Response<Map<Parking, String>> response) {
@@ -213,7 +218,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 CameraPosition curr = mGoogleMap.getCameraPosition();
                 myPosition = curr.target;
                 myZoom = curr.zoom;
-            }
+                try {
+                    getParkings();
+                } catch (Exception e) {
+                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                }}
         });
 
         myMarker = googleMap.addMarker(new MarkerOptions()
@@ -236,11 +245,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         CameraPosition Liberty = CameraPosition.builder().target(new LatLng(32.824685, 35.234116)).zoom(15).bearing(0).build();
 
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(Liberty));
-        try {
-            getParkings();
-        } catch (Exception e) {
-            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-        }
     }
 
     public void myParkingDialog(final Marker marker) {
@@ -327,7 +331,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         myDialog.setContentView(R.layout.order_dialog);
         myDialog.setTitle("Order Dialog");
         myDialog.show();
-
+        int total=0;
         validityError = (TextView) myDialog.findViewById(R.id.validityError);
         startTimeButton = (Button) myDialog.findViewById(R.id.startTimeButton);
         endTimeButton = (Button) myDialog.findViewById(R.id.endTimeButton);
@@ -402,10 +406,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         if (date != null && startTime != null && endTime != null) {
             if (endHour > startHour) // checking if the time passess a day.
             {
-                sumPriceText.setText("Price: " + price * (endHour - startHour));
+                total = price * (endHour - startHour);
             } else {
-                sumPriceText.setText("Price: " + price * (endHour + 24 - startHour));
+                total = price * (endHour + 24 - startHour);
             }
+            sumPriceText.setText("Price: " + total);
         }
 
         if (pickedDate && pickedEndTime && pickedStartTime) //if all values are assigned
@@ -425,12 +430,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             }, 3000);
         }
         validityError.setEnabled(false);
+        final int finalTotal = total;
         submitButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
                 myDialog.cancel(); // Exits existing dialog
-                orderVerificationDialog(date,date2,startTime,endTime,price);
+                orderVerificationDialog(date,date2,startTime,endTime, finalTotal);
             }
         });
 
