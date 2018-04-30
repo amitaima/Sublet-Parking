@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:noHistory = "true"
-    android:background="@drawable/gradient"
+    android:background="@drawable/background_cropped_blurred"
     tools:context="com.subletparking.subletparking.MainActivity">
 
 
@@ -111,7 +111,7 @@
         android:layout_below="@+id/facebook_login_button"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="46dp"
-        app:srcCompat="@mipmap/ic_logo" />
+        app:srcCompat="@drawable/logo4" />
 
 
 </RelativeLayout>
