@@ -26,7 +26,7 @@ public class MyApplication extends Application {
     private long userId;
     private String userName;
     private AccessToken userToken;
-    public static final String BASE_URL = "http:/192.168.14.33:5000/"; //server url
+    public static final String BASE_URL = "http:/10.100.102.153:5000/"; //server url
     Gson gson = new GsonBuilder()
             .setLenient() //this relaxes the gson a lot, letting it parse malformed JSON as well
             .create();

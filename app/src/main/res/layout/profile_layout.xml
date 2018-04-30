@@ -6,21 +6,47 @@
     xmlns:facebook="http://schemas.android.com/tools">
 
 
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:maxHeight="200dp"
+        android:scaleType="fitCenter"
+        app:srcCompat="@color/colorAccent" />
+
     <Button
         android:id="@+id/addParkingButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:text="add parking"
-        android:layout_below="@+id/menuButton1"
-        android:layout_alignStart="@+id/friendProfilePicture" />
+        android:layout_below="@+id/imageView4"
+        android:layout_toEndOf="@+id/menuButton1"
+        android:layout_marginStart="103dp" />
 
-    <com.facebook.login.widget.ProfilePictureView
-        android:id="@+id/friendProfilePicture"
+    <FrameLayout
+        android:id="@+id/profilePicFrame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        facebook:preset_size="normal"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/menuButton1"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="0.11">
+
+        <com.facebook.login.widget.ProfilePictureView
+            android:id="@+id/friendProfilePicture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            facebook:preset_size="normal" />
+
+        <ImageView
+            android:id="@+id/android"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:contentDescription="@null"
+            android:src="@drawable/circularimage" />
+    </FrameLayout>
 
 
     <!--<com.dd.ShadowLayout
@@ -52,9 +78,9 @@
         android:layout_height="20dp"
         android:text=""
         android:textColor="#BB33AA"
-        android:layout_marginTop="70dp"
-        android:layout_below="@+id/addParkingButton"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/profilePicFrame"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="9dp" />
     <ImageButton
         android:id="@+id/menuButton1"
         style="?android:attr/borderlessButtonStyle"
