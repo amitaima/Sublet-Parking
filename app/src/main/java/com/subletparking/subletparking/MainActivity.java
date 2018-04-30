@@ -3,13 +3,16 @@ package com.subletparking.subletparking;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.TimeUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
 import android.content.Intent;
@@ -36,6 +39,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Timer;
 
+import jp.wasabeef.blurry.Blurry;
 import okio.Timeout;
 
 import static android.R.attr.data;
@@ -45,12 +49,26 @@ public class MainActivity extends AppCompatActivity {
     private CallbackManager callbackManager;
     //private TextView info;
     private LoginButton loginbutton;
+    CardView facebookCardView;
+    ViewGroup rootView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loginbutton = (LoginButton)findViewById(R.id.facebook_login_button);
+        facebookCardView = (CardView)findViewById(R.id.facebookCardView);
+        rootView = (ViewGroup) findViewById(R.id.rootView);
+
+        facebookCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                if (v.getId() == R.id.facebookCardView){
+                    loginbutton.performClick();
+                }
+            }
+        });
+
 
         // FOR NOW THAT WAY YOU DONT NEED TO LOGOUT AND IN EVERY TIME///////////////////
 //        LoginManager.getInstance().logOut();
