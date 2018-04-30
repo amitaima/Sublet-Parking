@@ -415,11 +415,35 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         if (date != null && startTime != null && endTime != null) {
             if (endHour > startHour) // checking if the time passess a day.
             {
-                total = price * (endHour - startHour);
+                if(endMinute>startMinute) {
+                    sumPriceText.setText("Price: " + price * ((endHour - startHour)+1));
+                    total = price*((endHour-startHour)+1);
+                } else {
+                    sumPriceText.setText("Price: " + price * (endHour - startHour));
+                    total = price*(endHour-startHour);
+                }
+                date2=date;
+            } else if(endHour == startHour) { // New from here
+                if(endMinute > startMinute){
+                    sumPriceText.setText("Price: " + price);
+                    total = price;
+                    date2=date;
+                } else if(endMinute < startMinute){
+                    sumPriceText.setText("Price: " + price*25);
+                    total = price*25;
+                } else {
+                    sumPriceText.setText("Price: " + price*24);
+                    total = price*24;
+                } // To here
             } else {
-                total = price * (endHour + 24 - startHour);
+                if(endMinute>startMinute) {
+                    sumPriceText.setText("Price: " + price * ((endHour + 24 - startHour)+1));
+                    total = price*((endHour + 24 - startHour)+1);
+                } else {
+                    sumPriceText.setText("Price: " + price * (endHour + 24 - startHour));
+                    total = price*(endHour + 24 - startHour);
+                }
             }
-            sumPriceText.setText("Price: " + total);
         }
 
         if (pickedDate && pickedEndTime && pickedStartTime) //if all values are assigned
@@ -434,7 +458,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             validityError.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    validityError.setText("At least one of the fields is empty");
+                    validityError.setText("All fields must be filled to continue");
                 }
             }, 3000);
         }
