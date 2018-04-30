@@ -84,7 +84,7 @@ public class ProfileFragment extends Fragment {
     ImageButton addTimeButton, menuButton;
     EditText insertTimeStart, insertTimeEnd, insertPrice, insertDescription;
     PlaceAutocompleteFragment insertAddressPlace;
-    String address, timeStart, timeEnd, size, description;
+    String address, timeStart = "", timeEnd = "", size, description;
     DrawerLayout mDrawerLayout;
     ListView mDrawerList;
     int price;
@@ -109,10 +109,10 @@ public class ProfileFragment extends Fragment {
         });
         //getHasParking();
         openDialog.setOnClickListener(new View.OnClickListener() {
-           @Override
+            @Override
             public void onClick(View v){
                 myAlertDialog();
-           }
+            }
         });
 
 //profile picture
@@ -196,13 +196,21 @@ public class ProfileFragment extends Fragment {
                 try {
                     long id = ap.getUserId();
                     int PLACE_PICKER_REQUEST=1;
-                    timeStart = insertTimeStart.getText().toString();
-                    timeEnd = insertTimeEnd.getText().toString();
+                    //timeStart logic
+                    int st = Integer.valueOf(insertTimeStart.getText().toString());
+                    if (st < 10 || (st < 22 && st > 12)) timeStart = "0"; //one digit hour
+                    if (st > 12) timeStart += String.valueOf(st - 12) + "pm";
+                    else timeStart += String.valueOf(st) + "am";
+                    //timeEnd logic
+                    int en = Integer.valueOf(insertTimeEnd.getText().toString());
+                    if (en < 10 || (en < 22 && en > 12)) timeEnd = "0"; //one digit hour
+                    if (en > 12) timeEnd = String.valueOf(en - 12) + "pm";
+                    else timeEnd = String.valueOf(en) + "am";
                     price = Integer.parseInt(insertPrice.getText().toString());
                     description = insertDescription.getText().toString();//CRASHES
                     /////////////////////////////////////
 
-                    Parking parking = new Parking(id, placeLon, placeLat, address, timeStart + " to " + timeEnd, price, 0, 0, size, description, false);
+                    Parking parking = new Parking(id, placeLon, placeLat, address, timeStart + "-" + timeEnd, price, 0, 0, size, description, false);
                     //demo parking; still needs: picker from a map to get both address and lat/lon,
                     sendParking(parking);
                 } catch (Throwable e) {
@@ -257,7 +265,7 @@ public class ProfileFragment extends Fragment {
     }
 
     public void sendParking(Parking park) {
-            ap.getApiService().insertParking(park).enqueue(new Callback<Parking>() {
+        ap.getApiService().insertParking(park).enqueue(new Callback<Parking>() {
             @Override
             public void onResponse(retrofit2.Call<Parking> call, Response<Parking> response)
             {
