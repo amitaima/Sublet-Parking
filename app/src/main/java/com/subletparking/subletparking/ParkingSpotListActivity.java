@@ -22,14 +22,21 @@ import android.app.Fragment;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
+import com.facebook.login.widget.ProfilePictureView;
+
+import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 public class ParkingSpotListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     ImageButton menuButtun;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +83,30 @@ public class ParkingSpotListActivity extends AppCompatActivity
                         navDefaultTextColor
                 }
         );
-
+        final MyApplication ap = (MyApplication)getApplication();
+        GraphRequest request = GraphRequest.newMeRequest(
+                ap.getUserToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(
+                            JSONObject object,
+                            GraphResponse response) {
+                        try {
+                            ap.setUserName((String) object.get("name"));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name");
+        request.setParameters(parameters);
+        try {
+            request.executeAsync();
+        }
+        catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show(); // Makes a small message.
+        }
         navigationView.setItemTextColor(navMenuTextList);
 
         ////////Set status bar color///////////
@@ -108,12 +138,6 @@ public class ParkingSpotListActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings) {
-            return true;
-        }*/
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -154,13 +178,7 @@ public class ParkingSpotListActivity extends AppCompatActivity
                     .replace(R.id.contentFrame,
                             new CustomerServiceFragment())
                     .commit();
-        } /*else if (id == R.id.nav_logout) {
-            Intent intent = new Intent(this, MainActivity.class);
-            LoginManager.getInstance().logOut();
-            finish();
-            startActivity(intent);
-        }*/
-
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

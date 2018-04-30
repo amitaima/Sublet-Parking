@@ -40,6 +40,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
+import com.facebook.login.widget.ProfilePictureView;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.gcm.Task;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -73,6 +74,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.subletparking.subletparking.R.id.drawer_layout;
 import static com.subletparking.subletparking.R.id.parent;
 import static com.subletparking.subletparking.R.id.timePicker;
 
@@ -123,8 +125,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         searchIcon.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+             public void onClick(View view) {
                 mDrawerLayout.openDrawer(Gravity.START);
+                MyApplication ap = (MyApplication)getActivity().getApplication();
+                View drawerView = mDrawerLayout.getRootView();
+                TextView name = (TextView)drawerView.findViewById(R.id.UserNameText);
+                name.setText(ap.getUserName());
+                ((ProfilePictureView) drawerView.findViewById(R.id.friendProfilePicture))
+                        .setProfileId(String.valueOf(ap.getUserId()));
+
             }
         });
         //move to a place chosen in the search bar

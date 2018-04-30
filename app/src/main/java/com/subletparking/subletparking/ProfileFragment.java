@@ -39,6 +39,9 @@ import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.codemybrainsout.placesearch.PlaceSearchDialog;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.widget.ProfilePictureView;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.ResultCallback;
@@ -53,6 +56,9 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.vision.text.Text;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -74,6 +80,7 @@ public class ProfileFragment extends Fragment {
     Button openDialog, pickAddressButton;
     Dialog myDialog;
     Button submitButton,close;
+    ProfilePictureView profilePictureView;
     ImageButton addTimeButton, menuButton;
     EditText insertTimeStart, insertTimeEnd, insertPrice, insertDescription;
     PlaceAutocompleteFragment insertAddressPlace;
@@ -89,6 +96,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.profile_layout, container, false);
         ap = (MyApplication) this.getActivity().getApplication();
+        profilePictureView = (ProfilePictureView) myView.findViewById(R.id.friendProfilePicture);
         openDialog = (Button) myView.findViewById(R.id.addParkingButton);
         menuButton = (ImageButton) myView.findViewById(R.id.menuButton1);
         mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
@@ -99,7 +107,7 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-        getHasParking();
+        //getHasParking();
         openDialog.setOnClickListener(new View.OnClickListener() {
            @Override
             public void onClick(View v){
@@ -107,6 +115,9 @@ public class ProfileFragment extends Fragment {
            }
         });
 
+//profile picture
+        profilePictureView.setProfileId(String.valueOf(ap.getUserId()));
+        ((TextView) myView.findViewById(R.id.UserNameText)).setText(ap.getUserName());
         return myView;
     }
 
@@ -167,26 +178,12 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
-        /*insertAddressPlace.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                placeLat = place.getLatLng().latitude;
-                placeLon = place.getLatLng().longitude;
-            }
-
-            @Override
-            public void onError(Status status) {
-
-            }
-        });*/
-
         pickAddressButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
                 addressDialog();
             }
         });
-
         submitButton.setEnabled(true);
         close.setEnabled(true);
         addTimeButton.setEnabled(true);
@@ -199,35 +196,13 @@ public class ProfileFragment extends Fragment {
                 try {
                     long id = ap.getUserId();
                     int PLACE_PICKER_REQUEST=1;
-                    //get all of the info from the layout
-
-                    /*PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-                    Intent intent;
-                    try {
-                        intent = builder.build((Activity) getActivity().getApplicationContext());
-                        startActivityForResult(intent, PLACE_PICKER_REQUEST);
-                    } catch (GooglePlayServicesRepairableException e) {
-                        e.printStackTrace();
-                    } catch (GooglePlayServicesNotAvailableException e) {
-                        e.printStackTrace();
-                    }*/
-
-                    /*public void onActivityResult(int requestCode, int resultCode, Intent intentData)
-                    {
-                        if(requestCode==PLACE_PICKER_REQUEST)
-                        {
-                            if(resultCode==RESULT_OK)
-                            {
-                                Place place= PlacePicker.getPlace(intentData, this);
-                                String address = String.format("Place: %s",place.getAddress());
-                            }}}*/
                     timeStart = insertTimeStart.getText().toString();
                     timeEnd = insertTimeEnd.getText().toString();
                     price = Integer.parseInt(insertPrice.getText().toString());
                     description = insertDescription.getText().toString();//CRASHES
                     /////////////////////////////////////
 
-                    Parking parking = new Parking(id, placeLat, placeLon, address, timeStart + " to " + timeEnd, price, 0, 0, size, description, false);
+                    Parking parking = new Parking(id, placeLon, placeLat, address, timeStart + " to " + timeEnd, price, 0, 0, size, description, false);
                     //demo parking; still needs: picker from a map to get both address and lat/lon,
                     sendParking(parking);
                 } catch (Throwable e) {
