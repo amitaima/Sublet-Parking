@@ -121,6 +121,7 @@ public class ProfileFragment extends Fragment {
         return myView;
     }
 
+    // Dialog that lets you insert address for adding a parking
     public void addressDialog()
     {
         PlaceSearchDialog placeSearchDialog = new PlaceSearchDialog.Builder(getActivity())
@@ -146,6 +147,7 @@ public class ProfileFragment extends Fragment {
         placeSearchDialog.show();
     }
 
+    // Add parking dialog
     public void myAlertDialog(){
         myDialog = new Dialog(getActivity());
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -264,6 +266,7 @@ public class ProfileFragment extends Fragment {
         myDialog.show();
     }
 
+    // submitting the new parking to the database
     public void sendParking(Parking park) {
         ap.getApiService().insertParking(park).enqueue(new Callback<Parking>() {
             @Override
@@ -277,6 +280,8 @@ public class ProfileFragment extends Fragment {
             public void onFailure(retrofit2.Call<Parking> call, Throwable t) {}
         });
     }
+
+    // Checks if the user has a parking
     public void getHasParking() {
         ap.getApiService().hasParking(ap.getUserId()).enqueue(new Callback<String>() {
             TextView ans = (TextView)myView.findViewById(R.id.hasParkingAns);

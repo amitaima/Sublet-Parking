@@ -167,6 +167,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    // Getting all parkings from database that are in the space where the map stands
     public void getParkings() {
         Call<Map<Parking, String>> call = null;
         MyApplication ap = (MyApplication) this.getActivity().getApplication();
@@ -206,13 +207,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }//try getting the page
     }
 
+    // Openning the map
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
         MapsInitializer.initialize(getActivity());
         mGoogleMap = googleMap;
         googleMap.setMapType((GoogleMap.MAP_TYPE_NORMAL));
-        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) //My location button
                 == PackageManager.PERMISSION_GRANTED) {
             googleMap.setMyLocationEnabled(true);
         } else {
@@ -256,6 +258,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(Liberty));
     }
 
+    // The parking dialog where you see info about the parking
     public void myParkingDialog(final Marker marker) {
         myDialog = new Dialog(getActivity());
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -334,6 +337,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
+    // The order dialog where you pick date and time and see the price
     public void myOrderDialog (final int price) {
         myDialog = new Dialog(getActivity());
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -377,6 +381,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
+        // Checks if date was already picked to implify it
         if (pickedDate == true) {
             date = year + "-" + month + "-" + day;
             DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
@@ -393,6 +398,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             date2 = df.format(newDate);
             dateButton.setHint(date);
         }
+
+        // Checks if startTime was already picked to implify it
         if (pickedStartTime == true) {
             if (startHour < 10) startTime = "0";
             else startTime = ""; //pad with 0
@@ -402,6 +409,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 startTime += String.valueOf(startHour) + ":" + String.valueOf(startMinute) + ":00";//pad with 0s
             startTimeButton.setHint(startTime);
         }
+
+        // Checks if endTime was already picked to implify it
         if (pickedEndTime == true) {
             if (endHour < 10) endTime = "0";
             else endTime = "";//pad with 0
@@ -412,6 +421,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             endTimeButton.setHint(endTime);
         }
 
+        // Sets price by time
         if (date != null && startTime != null && endTime != null) {
             if (endHour > startHour) // checking if the time passess a day.
             {
@@ -446,6 +456,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             }
         }
 
+        // Checks if all fields were set and if the parking isnt occupied.
         if (pickedDate && pickedEndTime && pickedStartTime) //if all values are assigned
         {
             if (startHour >= strtTime && endHour <= ndTime) //if the hours are not in the parking's range
@@ -482,6 +493,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
+    // Dialog witch tells the buyer what he is going to order if he continues
     public void orderVerificationDialog(final String date, final String date2, final String startTime, final String endTime, final int price) {
         myDialog = new Dialog(getActivity());
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -526,7 +538,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-
+    // The time picker dialog
     public void timeDialog(final int id, final int price) {
         myDialog = new Dialog(getActivity());
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -579,6 +591,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
+    // The date picker dialog
     public void dateDialog(final int price) {
         myDialog = new Dialog(getActivity());
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
