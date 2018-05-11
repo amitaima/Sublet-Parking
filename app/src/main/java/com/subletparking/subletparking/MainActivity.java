@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         ////////Set status bar color///////////
         Window window = this.getWindow();
         // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(this,R.color.colorAccent));
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.dark_gray));
     }
 
     public Bitmap getFacebookProfilePicture(String userID){
@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
         return bitmap;
     }
 
+    // If facebook login is succeful it comes here
     public void fbLoginSuccessfull(String userId) {
         String firstName = "https://graph.facebook.com/" + userId + "/first_name"; //Gets users first name.
         String lastName = "https://graph.facebook.com/" + userId + "/last_name"; //Gets users last name.
@@ -158,12 +159,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    public void launchSignUpActivity(View view) {
-        Intent intent = new Intent(this, SignUpActivity.class);
-        finish();
-        startActivity(intent);
     }
 
     public void launchParkingSpotListActivity(View view) {

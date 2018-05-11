@@ -64,6 +64,7 @@ public class SettingsFragment extends Fragment {
 
         notificationSwitch.setChecked(true);
 
+        // Pops a notification
         notificationTestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,6 +118,7 @@ public class SettingsFragment extends Fragment {
         return myView;
     }
 
+    //// Dialog to pick color theme
     public void myColorDialog() {
         myDialog = new Dialog(getActivity());
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -168,6 +170,7 @@ public class SettingsFragment extends Fragment {
 
     }
 
+    // Dialog to pick font size
     public void myTextDialog() {
         myDialog = new Dialog(getActivity());
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

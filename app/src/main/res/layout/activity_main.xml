@@ -108,10 +108,10 @@
         android:id="@+id/logo"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        app:srcCompat="@drawable/logo5"
+        android:layout_marginTop="43dp"
         android:layout_below="@+id/facebook_login_button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="46dp"
-        app:srcCompat="@drawable/logo4" />
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>
